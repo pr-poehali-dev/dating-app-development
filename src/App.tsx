@@ -61,7 +61,13 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppContent />
+          <div className="min-h-screen bg-red-500 flex items-center justify-center">
+            <div className="bg-white p-8 rounded-lg">
+              <h1 className="text-2xl font-bold">LoveConnect</h1>
+              <p>Проверяем авторизацию...</p>
+              <AppContent />
+            </div>
+          </div>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
