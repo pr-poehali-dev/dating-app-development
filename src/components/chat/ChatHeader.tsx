@@ -18,7 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useCall } from '@/contexts/CallContext';
+// import { useCall } from '@/contexts/CallContext';
 import Icon from '@/components/ui/icon';
 
 interface ChatUser {
@@ -54,7 +54,7 @@ const formatLastSeen = (date?: Date, isOnline?: boolean) => {
 
 export default function ChatHeader({ chatUser, onDeleteChat }: ChatHeaderProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const { startCall } = useCall();
+  // const { startCall } = useCall();
 
   const handleDeleteChat = () => {
     onDeleteChat();
@@ -62,7 +62,8 @@ export default function ChatHeader({ chatUser, onDeleteChat }: ChatHeaderProps) 
   };
 
   const handleVideoCall = () => {
-    startCall(chatUser.id, chatUser.name);
+    // startCall(chatUser.id, chatUser.name);
+    alert('Видео звонок будет доступен в следующем обновлении!');
   };
   return (
     <>

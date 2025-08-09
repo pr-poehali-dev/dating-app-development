@@ -10,7 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import Icon from '@/components/ui/icon';
 
 export default function ProfileWeb() {
-  const { user, updateProfile } = useAuth();
+  const { user, updateProfile, isLoading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -31,6 +31,18 @@ export default function ProfileWeb() {
       });
     }
   }, [user]);
+
+  // Показываем загрузку пока проверяем авторизацию
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-love-DEFAULT border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Загрузка профиля...</p>
+        </div>
+      </div>
+    );
+  }
 
   const [stats, setStats] = useState({
     likes: 0,
@@ -69,20 +81,35 @@ export default function ProfileWeb() {
     }));
   };
 
+  // Отладка: выведем в консоль что у нас есть
+  console.log('ProfileWeb Debug:', { user, isLoading });
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
             <Icon name="User" size={64} className="text-gray-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Войдите в аккаунт</h2>
-            <p className="text-gray-600 mb-6">Для просмотра профиля необходимо войти в систему</p>
-            <Button 
-              onClick={() => window.location.href = '/auth'}
-              className="w-full bg-love-DEFAULT hover:bg-love-dark"
-            >
-              Войти
-            </Button>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Профиль недоступен</h2>
+            <p className="text-gray-600 mb-6">Пользователь не найден или не авторизован</p>
+            <div className="space-y-2">
+              <Button 
+                onClick={() => window.location.href = '/auth'}
+                className="w-full bg-love-DEFAULT hover:bg-love-dark"
+              >
+                Войти в систему
+              </Button>
+              <Button 
+                onClick={() => window.location.reload()}
+                variant="outline"
+                className="w-full"
+              >
+                Обновить страницу
+              </Button>
+            </div>
+            <p className="text-xs text-gray-400 mt-4">
+              Debug: User = {user ? 'найден' : 'null'}, Loading = {isLoading ? 'true' : 'false'}
+            </p>
           </CardContent>
         </Card>
       </div>
