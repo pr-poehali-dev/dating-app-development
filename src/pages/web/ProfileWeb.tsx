@@ -85,7 +85,7 @@ export default function ProfileWeb() {
                     {user.name}
                   </h2>
                   <p className="text-gray-600 mb-2">
-                    {user.age} лет • {typeof user.location === 'string' ? user.location : user.location?.city}
+                    {user.age} лет • {user.location || 'Москва'}
                   </p>
                   {user.job && <p className="text-sm text-gray-500 mb-4">💼 {user.job}</p>}
                   
