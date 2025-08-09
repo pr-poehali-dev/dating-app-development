@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Discover from "./pages/Discover";
 import Matches from "./pages/Matches";
@@ -39,8 +40,8 @@ const AppContent = () => {
   return (
     <>
       <Routes>
+        <Route path="/" element={user ? <Navigate to="/discover" /> : <Home />} />
         <Route path="/auth" element={user ? <Navigate to="/discover" /> : <Auth />} />
-        <Route path="/" element={user ? <Navigate to="/discover" /> : <Navigate to="/auth" />} />
         <Route path="/discover" element={<ProtectedRoute><Discover /></ProtectedRoute>} />
         <Route path="/matches" element={<ProtectedRoute><Matches /></ProtectedRoute>} />
         <Route path="/chat/:id?" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
@@ -61,13 +62,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <div className="min-h-screen bg-red-500 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg">
-              <h1 className="text-2xl font-bold">LoveConnect</h1>
-              <p>Проверяем авторизацию...</p>
-              <AppContent />
-            </div>
-          </div>
+          <AppContent />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
