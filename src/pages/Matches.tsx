@@ -4,6 +4,7 @@ import { useAuth, User } from '@/contexts/AuthContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Icon from '@/components/ui/icon';
 
 const Matches = () => {
@@ -11,6 +12,7 @@ const Matches = () => {
   const navigate = useNavigate();
   const [matches, setMatches] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProfile, setSelectedProfile] = useState<User | null>(null);
 
   useEffect(() => {
     loadMatches();
@@ -61,6 +63,14 @@ const Matches = () => {
 
   const startChat = (matchId: string) => {
     navigate(`/chat/${matchId}`);
+  };
+
+  const openProfile = (match: User) => {
+    setSelectedProfile(match);
+  };
+
+  const closeProfile = () => {
+    setSelectedProfile(null);
   };
 
   if (loading) {
@@ -156,7 +166,11 @@ const Matches = () => {
                           Написать
                         </Button>
                         
-                        <Button size="sm" variant="outline">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => openProfile(match)}
+                        >
                           <Icon name="User" size={16} className="mr-1" />
                           Профиль
                         </Button>
@@ -180,6 +194,119 @@ const Matches = () => {
           </div>
         )}
       </div>
+
+      {/* Profile Modal */}
+      {selectedProfile && (
+        <Dialog open={!!selectedProfile} onOpenChange={() => closeProfile()}>
+          <DialogContent className="max-w-md mx-auto max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-love-light to-love-DEFAULT rounded-full flex items-center justify-center">
+                  <Icon name="User" size={20} className="text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span>{selectedProfile.name}, {selectedProfile.age}</span>
+                    {selectedProfile.verified && (
+                      <Icon name="Shield" size={16} className="text-blue-500" />
+                    )}
+                  </div>
+                  <div className="text-sm text-gray-500 font-normal">
+                    📍 {selectedProfile.location?.city || 'Москва'}
+                  </div>
+                </div>
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-6">
+              {/* Profile Photos */}
+              <div className="grid grid-cols-3 gap-2">
+                <div className="aspect-square bg-gradient-to-br from-pink-200 to-purple-200 rounded-lg flex items-center justify-center">
+                  <Icon name="User" size={32} className="text-gray-600" />
+                </div>
+                <div className="aspect-square bg-gradient-to-br from-blue-200 to-cyan-200 rounded-lg flex items-center justify-center">
+                  <Icon name="Camera" size={24} className="text-gray-600" />
+                </div>
+                <div className="aspect-square bg-gradient-to-br from-green-200 to-emerald-200 rounded-lg flex items-center justify-center">
+                  <Icon name="Heart" size={24} className="text-gray-600" />
+                </div>
+              </div>
+
+              {/* Bio */}
+              <div>
+                <h4 className="font-medium mb-2">О себе:</h4>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  {selectedProfile.bio}
+                </p>
+              </div>
+
+              {/* Interests */}
+              <div>
+                <h4 className="font-medium mb-2">Интересы:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProfile.interests.map((interest, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs">
+                      {interest}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Basic Info */}
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-gray-500">Возраст:</span>
+                  <div className="font-medium">{selectedProfile.age} лет</div>
+                </div>
+                <div>
+                  <span className="text-gray-500">Подписка:</span>
+                  <div className="font-medium">
+                    {selectedProfile.subscription === 'premium' ? 'Premium' : 'Базовая'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Online Status */}
+              <div className="flex items-center gap-2 text-sm">
+                <div className={`w-3 h-3 rounded-full ${
+                  selectedProfile.settings.showOnlineStatus ? 'bg-green-500' : 'bg-gray-400'
+                }`} />
+                <span className="text-gray-600">
+                  {selectedProfile.settings.showOnlineStatus ? 'Онлайн' : 'Был(а) недавно'}
+                </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <Button 
+                  className="flex-1 bg-love-DEFAULT hover:bg-love-dark"
+                  onClick={() => {
+                    startChat(selectedProfile.id);
+                    closeProfile();
+                  }}
+                >
+                  <Icon name="MessageCircle" size={16} className="mr-2" />
+                  Написать
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  className="border-red-200 hover:bg-red-50"
+                >
+                  <Icon name="Heart" size={16} className="text-red-500" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={closeProfile}
+                >
+                  <Icon name="X" size={16} />
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };
