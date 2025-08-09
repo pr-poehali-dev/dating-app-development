@@ -1,6 +1,23 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import Icon from '@/components/ui/icon';
 
 interface ChatUser {
@@ -19,6 +36,7 @@ interface ChatUser {
 interface ChatHeaderProps {
   chatUser: ChatUser;
   onStartVideoCall: () => void;
+  onDeleteChat: () => void;
 }
 
 const formatLastSeen = (date?: Date, isOnline?: boolean) => {
@@ -34,7 +52,13 @@ const formatLastSeen = (date?: Date, isOnline?: boolean) => {
   return `был(а) ${days} дн. назад`;
 };
 
-export default function ChatHeader({ chatUser, onStartVideoCall }: ChatHeaderProps) {
+export default function ChatHeader({ chatUser, onStartVideoCall, onDeleteChat }: ChatHeaderProps) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const handleDeleteChat = () => {
+    onDeleteChat();
+    setShowDeleteDialog(false);
+  };
   return (
     <div className="bg-white border-b border-gray-200 p-4">
       <div className="flex items-center justify-between">
@@ -75,11 +99,45 @@ export default function ChatHeader({ chatUser, onStartVideoCall }: ChatHeaderPro
             <Icon name="Video" size={18} className="mr-2" />
             Видео
           </Button>
-          <Button variant="outline" size="sm">
-            <Icon name="MoreVertical" size={18} />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Icon name="MoreVertical" size={18} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem
+                onClick={() => setShowDeleteDialog(true)}
+                className="text-red-600 focus:text-red-600 focus:bg-red-50"
+              >
+                <Icon name="Trash2" size={16} className="mr-2" />
+                Удалить переписку
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Удалить переписку?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Все сообщения с пользователем {chatUser.name} будут удалены безвозвратно. 
+              Это действие нельзя отменить.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Отмена</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteChat}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Удалить
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
   );
 }

@@ -38,6 +38,7 @@ interface ChatPreview {
 interface ChatSidebarProps {
   chatPreviews: ChatPreview[];
   activeChatId?: string;
+  onDeleteChat?: (chatId: string) => void;
 }
 
 const formatTime = (date: Date) => {

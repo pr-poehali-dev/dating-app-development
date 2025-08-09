@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth, User } from '@/contexts/AuthContext';
 import ChatSidebar from '@/components/chat/ChatSidebar';
 import ChatHeader from '@/components/chat/ChatHeader';
@@ -33,6 +33,7 @@ interface ChatPreview {
 export default function ChatWeb() {
   const { id: chatId } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [chatUser, setChatUser] = useState<ChatUser | null>(null);
@@ -172,18 +173,48 @@ export default function ChatWeb() {
     setShowVideoCall(false);
   };
 
+  const deleteChat = (chatIdToDelete: string) => {
+    // Удаляем сообщения чата
+    const savedChats = JSON.parse(localStorage.getItem('chats') || '{}');
+    delete savedChats[chatIdToDelete];
+    localStorage.setItem('chats', JSON.stringify(savedChats));
+    
+    // Обновляем список чатов
+    const updatedPreviews = chatPreviews.filter(preview => preview.id !== chatIdToDelete);
+    setChatPreviews(updatedPreviews);
+    
+    // Если удаляем активный чат, перенаправляем на список
+    if (chatIdToDelete === chatId) {
+      navigate('/chat');
+    }
+  };
+
+  const handleDeleteCurrentChat = () => {
+    if (chatId) {
+      deleteChat(chatId);
+    }
+  };
+
   if (showVideoCall && chatUser) {
     return <VideoCall chatUser={chatUser} onEndCall={endVideoCall} />;
   }
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      <ChatSidebar chatPreviews={chatPreviews} activeChatId={chatId} />
+      <ChatSidebar 
+        chatPreviews={chatPreviews} 
+        activeChatId={chatId} 
+        onDeleteChat={deleteChat}
+      />
 
       <div className="flex-1 flex flex-col">
         {chatId && chatUser ? (
           <>
-            <ChatHeader chatUser={chatUser} onStartVideoCall={startVideoCall} />
+            <ChatHeader 
+              chatUser={chatUser} 
+              onStartVideoCall={startVideoCall}
+              onDeleteChat={handleDeleteCurrentChat}
+            />
             <MessageList 
               messages={messages}
               currentUserId={user?.id}
