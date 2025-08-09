@@ -81,7 +81,7 @@ const Auth = () => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Icon name="Heart" size={32} className="text-white" />
-            <h1 className="text-3xl font-bold text-white">LoveConnect</h1>
+            <h1 className="text-3xl font-bold text-white">Noumi Dating</h1>
           </div>
           <p className="text-white/80">Найди свою вторую половинку</p>
         </div>
