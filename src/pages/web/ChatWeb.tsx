@@ -50,7 +50,7 @@ export default function ChatWeb() {
       loadChat(chatId);
       loadChatUser(chatId);
     }
-  }, [chatId]);
+  }, [chatId, chatPreviews]);
 
   const generateChatPreviews = () => {
     const sampleUsers = [
@@ -61,28 +61,37 @@ export default function ChatWeb() {
       { id: '5', name: 'Дмитрий', age: 30, bio: 'Программист и музыкант', interests: ['Программирование', 'Музыка'], verified: false, isOnline: true }
     ];
 
-    const previews = sampleUsers.map(userData => {
-      const savedChats = JSON.parse(localStorage.getItem('chats') || '{}');
-      const chatMessages = savedChats[userData.id] || [];
-      const lastMessage = chatMessages.length > 0 ? {
-        ...chatMessages[chatMessages.length - 1],
-        timestamp: new Date(chatMessages[chatMessages.length - 1].timestamp)
-      } : null;
+    const savedChats = JSON.parse(localStorage.getItem('chats') || '{}');
+    const deletedChats = JSON.parse(localStorage.getItem('deletedChats') || '[]');
+    
+    // Показываем только чаты с сообщениями И которые не были удалены
+    const previews = sampleUsers
+      .filter(userData => {
+        const hasMessages = savedChats[userData.id] && savedChats[userData.id].length > 0;
+        const isDeleted = deletedChats.includes(userData.id);
+        return hasMessages && !isDeleted;
+      })
+      .map(userData => {
+        const chatMessages = savedChats[userData.id] || [];
+        const lastMessage = chatMessages.length > 0 ? {
+          ...chatMessages[chatMessages.length - 1],
+          timestamp: new Date(chatMessages[chatMessages.length - 1].timestamp)
+        } : null;
 
-      return {
-        id: userData.id,
-        user: {
-          ...userData,
-          email: `${userData.name.toLowerCase()}@example.com`,
-          photos: [],
-          location: 'Москва',
-          subscription: Math.random() > 0.7 ? 'premium' : 'free',
-          lastActive: new Date(),
-        } as ChatUser,
-        lastMessage,
-        unreadCount: Math.floor(Math.random() * 4)
-      };
-    });
+        return {
+          id: userData.id,
+          user: {
+            ...userData,
+            email: `${userData.name.toLowerCase()}@example.com`,
+            photos: [],
+            location: 'Москва',
+            subscription: Math.random() > 0.7 ? 'premium' : 'free',
+            lastActive: new Date(),
+          } as ChatUser,
+          lastMessage,
+          unreadCount: Math.floor(Math.random() * 4)
+        };
+      });
 
     setChatPreviews(previews);
   };
@@ -100,6 +109,35 @@ export default function ChatWeb() {
     const preview = chatPreviews.find(p => p.id === chatId);
     if (preview) {
       setChatUser(preview.user);
+    } else {
+      // Если чат не найден в previews, проверим не удален ли он
+      const deletedChats = JSON.parse(localStorage.getItem('deletedChats') || '[]');
+      if (deletedChats.includes(chatId)) {
+        // Чат удален, перенаправляем на главную страницу чатов
+        navigate('/chat');
+        return;
+      }
+      
+      // Иначе загружаем данные пользователя из образца
+      const sampleUsers = [
+        { id: '1', name: 'Анна', age: 25, bio: 'Люблю путешествия и кофе ☕️', interests: ['Путешествия', 'Кофе'], verified: true, isOnline: true },
+        { id: '2', name: 'Максим', age: 28, bio: 'Спортсмен и любитель приключений', interests: ['Спорт', 'Приключения'], verified: false, isOnline: false, lastSeen: new Date(Date.now() - 1000 * 60 * 15) },
+        { id: '3', name: 'София', age: 23, bio: 'Художница в душе', interests: ['Искусство'], verified: true, isOnline: true },
+        { id: '4', name: 'Елена', age: 26, bio: 'Фотограф и любительница искусства', interests: ['Фотография'], verified: true, isOnline: false, lastSeen: new Date(Date.now() - 1000 * 60 * 60 * 2) },
+        { id: '5', name: 'Дмитрий', age: 30, bio: 'Программист и музыкант', interests: ['Программирование', 'Музыка'], verified: false, isOnline: true }
+      ];
+      
+      const userData = sampleUsers.find(u => u.id === chatId);
+      if (userData) {
+        setChatUser({
+          ...userData,
+          email: `${userData.name.toLowerCase()}@example.com`,
+          photos: [],
+          location: 'Москва',
+          subscription: Math.random() > 0.7 ? 'premium' : 'free',
+          lastActive: new Date(),
+        } as ChatUser);
+      }
     }
   };
 
@@ -172,6 +210,13 @@ export default function ChatWeb() {
     delete savedChats[chatIdToDelete];
     localStorage.setItem('chats', JSON.stringify(savedChats));
     
+    // Добавляем чат в список удаленных
+    const deletedChats = JSON.parse(localStorage.getItem('deletedChats') || '[]');
+    if (!deletedChats.includes(chatIdToDelete)) {
+      deletedChats.push(chatIdToDelete);
+      localStorage.setItem('deletedChats', JSON.stringify(deletedChats));
+    }
+    
     // Обновляем список чатов
     const updatedPreviews = chatPreviews.filter(preview => preview.id !== chatIdToDelete);
     setChatPreviews(updatedPreviews);
@@ -186,6 +231,12 @@ export default function ChatWeb() {
     if (chatId) {
       deleteChat(chatId);
     }
+  };
+
+  // Дополнительная функция для очистки списка удаленных чатов (если понадобится)
+  const clearDeletedChats = () => {
+    localStorage.removeItem('deletedChats');
+    generateChatPreviews();
   };
 
 
