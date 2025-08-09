@@ -60,6 +60,7 @@ export default function ChatHeader({ chatUser, onStartVideoCall, onDeleteChat }:
     setShowDeleteDialog(false);
   };
   return (
+    <>
     <div className="bg-white border-b border-gray-200 p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -119,25 +120,26 @@ export default function ChatHeader({ chatUser, onStartVideoCall, onDeleteChat }:
       </div>
     </div>
 
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Удалить переписку?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Все сообщения с пользователем {chatUser.name} будут удалены безвозвратно. 
-              Это действие нельзя отменить.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Отмена</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteChat}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              Удалить
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+    <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Удалить переписку?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Все сообщения с пользователем {chatUser.name} будут удалены безвозвратно. 
+            Это действие нельзя отменить.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Отмена</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleDeleteChat}
+            className="bg-red-600 hover:bg-red-700"
+          >
+            Удалить
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 }
