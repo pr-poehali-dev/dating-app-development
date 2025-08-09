@@ -5,6 +5,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { CallProvider } from "@/contexts/CallContext";
+import IncomingCallModal from "@/components/call/IncomingCallModal";
+import VideoCallInterface from "@/components/call/VideoCallInterface";
 import Home from "./pages/Home";
 import HomeWeb from "./pages/web/HomeWeb";
 import Auth from "./pages/Auth";
@@ -66,6 +69,10 @@ const AppContent = () => {
         <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      
+      {/* Глобальные модали для звонков */}
+      <IncomingCallModal />
+      <VideoCallInterface />
     </Layout>
   );
 };
@@ -77,7 +84,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppContent />
+          <CallProvider>
+            <AppContent />
+          </CallProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

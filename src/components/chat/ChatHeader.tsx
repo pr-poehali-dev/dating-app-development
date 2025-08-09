@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { useCall } from '@/contexts/CallContext';
 import Icon from '@/components/ui/icon';
 
 interface ChatUser {
@@ -35,7 +36,6 @@ interface ChatUser {
 
 interface ChatHeaderProps {
   chatUser: ChatUser;
-  onStartVideoCall: () => void;
   onDeleteChat: () => void;
 }
 
@@ -52,12 +52,17 @@ const formatLastSeen = (date?: Date, isOnline?: boolean) => {
   return `был(а) ${days} дн. назад`;
 };
 
-export default function ChatHeader({ chatUser, onStartVideoCall, onDeleteChat }: ChatHeaderProps) {
+export default function ChatHeader({ chatUser, onDeleteChat }: ChatHeaderProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const { startCall } = useCall();
 
   const handleDeleteChat = () => {
     onDeleteChat();
     setShowDeleteDialog(false);
+  };
+
+  const handleVideoCall = () => {
+    startCall(chatUser.id, chatUser.name);
   };
   return (
     <>
@@ -96,7 +101,7 @@ export default function ChatHeader({ chatUser, onStartVideoCall, onDeleteChat }:
             <Icon name="Phone" size={18} className="mr-2" />
             Позвонить
           </Button>
-          <Button variant="outline" size="sm" onClick={onStartVideoCall}>
+          <Button variant="outline" size="sm" onClick={handleVideoCall}>
             <Icon name="Video" size={18} className="mr-2" />
             Видео
           </Button>

@@ -5,7 +5,6 @@ import ChatSidebar from '@/components/chat/ChatSidebar';
 import ChatHeader from '@/components/chat/ChatHeader';
 import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
-import VideoCall from '@/components/chat/VideoCall';
 import EmptyChat from '@/components/chat/EmptyChat';
 
 interface Message {
@@ -38,7 +37,7 @@ export default function ChatWeb() {
   const [newMessage, setNewMessage] = useState('');
   const [chatUser, setChatUser] = useState<ChatUser | null>(null);
   const [isTyping, setIsTyping] = useState(false);
-  const [showVideoCall, setShowVideoCall] = useState(false);
+
   const [chatPreviews, setChatPreviews] = useState<ChatPreview[]>([]);
 
   // Generate chat previews
@@ -165,13 +164,7 @@ export default function ChatWeb() {
     }, 1000 + Math.random() * 2000);
   };
 
-  const startVideoCall = () => {
-    setShowVideoCall(true);
-  };
 
-  const endVideoCall = () => {
-    setShowVideoCall(false);
-  };
 
   const deleteChat = (chatIdToDelete: string) => {
     // Удаляем сообщения чата
@@ -195,9 +188,7 @@ export default function ChatWeb() {
     }
   };
 
-  if (showVideoCall && chatUser) {
-    return <VideoCall chatUser={chatUser} onEndCall={endVideoCall} />;
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -212,7 +203,6 @@ export default function ChatWeb() {
           <>
             <ChatHeader 
               chatUser={chatUser} 
-              onStartVideoCall={startVideoCall}
               onDeleteChat={handleDeleteCurrentChat}
             />
             <MessageList 
