@@ -17,8 +17,20 @@ export default function ProfileWeb() {
     bio: user?.bio || '',
     age: user?.age || 18,
     interests: user?.interests || [],
-    job: user?.job || '',
+    job: '',
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name,
+        bio: user.bio,
+        age: user.age,
+        interests: user.interests,
+        job: '',
+      });
+    }
+  }, [user]);
 
   const [stats, setStats] = useState({
     likes: 0,
@@ -57,7 +69,25 @@ export default function ProfileWeb() {
     }));
   };
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-8 text-center">
+            <Icon name="User" size={64} className="text-gray-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Войдите в аккаунт</h2>
+            <p className="text-gray-600 mb-6">Для просмотра профиля необходимо войти в систему</p>
+            <Button 
+              onClick={() => window.location.href = '/auth'}
+              className="w-full bg-love-DEFAULT hover:bg-love-dark"
+            >
+              Войти
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -84,9 +114,8 @@ export default function ProfileWeb() {
                     {user.name}
                   </h2>
                   <p className="text-gray-600 mb-2">
-                    {user.age} лет • {user.location || 'Москва'}
+                    {user.age} лет • {typeof user.location === 'string' ? user.location : user.location?.city || 'Москва'}
                   </p>
-                  {user.job && <p className="text-sm text-gray-500 mb-4">💼 {user.job}</p>}
                   
                   <div className="flex items-center justify-center gap-2 mb-4">
                     <Badge variant={user.subscription === 'premium' ? 'default' : 'secondary'}>
@@ -293,14 +322,23 @@ export default function ProfileWeb() {
               <CardContent>
                 <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
                   {/* Sample photos */}
-                  <div className="aspect-square bg-gradient-to-br from-pink-200 to-purple-200 rounded-lg flex items-center justify-center">
+                  <div className="aspect-square bg-gradient-to-br from-pink-200 to-purple-200 rounded-lg flex items-center justify-center relative group cursor-pointer">
                     <Icon name="User" size={32} className="text-gray-600" />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all flex items-center justify-center">
+                      <Icon name="Edit" size={20} className="text-white opacity-0 group-hover:opacity-100" />
+                    </div>
                   </div>
-                  <div className="aspect-square bg-gradient-to-br from-blue-200 to-cyan-200 rounded-lg flex items-center justify-center">
+                  <div className="aspect-square bg-gradient-to-br from-blue-200 to-cyan-200 rounded-lg flex items-center justify-center relative group cursor-pointer">
                     <Icon name="Camera" size={24} className="text-gray-600" />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all flex items-center justify-center">
+                      <Icon name="Edit" size={20} className="text-white opacity-0 group-hover:opacity-100" />
+                    </div>
                   </div>
-                  <div className="aspect-square bg-gradient-to-br from-green-200 to-emerald-200 rounded-lg flex items-center justify-center">
+                  <div className="aspect-square bg-gradient-to-br from-green-200 to-emerald-200 rounded-lg flex items-center justify-center relative group cursor-pointer">
                     <Icon name="Heart" size={24} className="text-gray-600" />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all flex items-center justify-center">
+                      <Icon name="Edit" size={20} className="text-white opacity-0 group-hover:opacity-100" />
+                    </div>
                   </div>
                   {Array.from({ length: 3 }).map((_, index) => (
                     <div
@@ -320,6 +358,29 @@ export default function ProfileWeb() {
                 </p>
               </CardContent>
             </Card>
+
+            {/* Premium Features */}
+            {user.subscription !== 'premium' && (
+              <Card className="bg-gradient-to-r from-love-light to-love-DEFAULT text-white">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-white bg-opacity-20 p-3 rounded-full">
+                      <Icon name="Crown" size={32} className="text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold mb-2">Откройте Premium возможности</h3>
+                      <p className="text-white/90 mb-4">
+                        Безлимитные лайки, супер-лайки, возможность видеть кто вас лайкнул и многое другое!
+                      </p>
+                      <Button variant="secondary" className="bg-white text-love-DEFAULT hover:bg-gray-100">
+                        <Icon name="Crown" size={16} className="mr-2" />
+                        Получить Premium
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>

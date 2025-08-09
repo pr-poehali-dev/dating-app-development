@@ -61,7 +61,7 @@ const AppContent = () => {
         <Route path="/discover" element={<ProtectedRoute><DiscoverComponent /></ProtectedRoute>} />
         <Route path="/matches" element={<ProtectedRoute><MatchesComponent /></ProtectedRoute>} />
         <Route path="/chat/:id?" element={<ProtectedRoute><ChatComponent /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><ProfileComponent /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProfileComponent />} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
