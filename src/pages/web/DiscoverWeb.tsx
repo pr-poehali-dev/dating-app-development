@@ -275,28 +275,27 @@ export default function DiscoverWeb() {
           <div className="flex flex-col gap-4">
             <Button
               size="lg"
-              variant="outline"
               onClick={() => handleSwipe('left')}
-              className="w-16 h-16 rounded-full border-2 border-red-200 hover:border-red-400 hover:bg-red-50 transition-all duration-200"
+              className="w-16 h-16 rounded-full bg-white border-2 border-red-300 hover:bg-red-500 hover:border-red-500 text-red-500 hover:text-white transition-all duration-200 shadow-lg"
             >
-              <Icon name="X" size={28} className="text-red-500" />
+              <Icon name="X" size={28} />
             </Button>
             
             <Button
               size="lg"
               onClick={() => handleSwipe('up')}
               disabled={superLikes === 0}
-              className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 disabled:opacity-50"
+              className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 hover:scale-105 text-white transition-all duration-200 disabled:opacity-50 shadow-lg"
             >
-              <Icon name="Star" size={28} className="text-white" />
+              <Icon name="Star" size={28} />
             </Button>
             
             <Button
               size="lg"
               onClick={() => handleSwipe('right')}
-              className="w-20 h-20 rounded-full bg-gradient-to-br from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 transition-all duration-200 shadow-lg"
+              className="w-20 h-20 rounded-full bg-gradient-to-br from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 hover:scale-105 text-white transition-all duration-200 shadow-lg"
             >
-              <Icon name="Heart" size={32} className="text-white" />
+              <Icon name="Heart" size={32} />
             </Button>
           </div>
         </div>
