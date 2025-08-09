@@ -81,43 +81,42 @@ export default function ProfileWeb() {
     }));
   };
 
-  // Отладка: выведем в консоль что у нас есть
-  console.log('ProfileWeb Debug:', { user, isLoading });
+  // Создаем демо-пользователя если нет авторизованного
+  const currentUser = user || {
+    id: 'demo',
+    name: 'Иван Петров',
+    email: 'ivan@example.com',
+    age: 28,
+    bio: 'Разработчик из Москвы 💻 Люблю путешествия, кофе и интересные разговоры. В поисках серьёзных отношений и новых впечатлений ✨',
+    photos: ['/img/4cf46a0e-c3f2-45b0-9806-3c40c852f7c0.jpg'],
+    location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
+    interests: ['Путешествия', 'Технологии', 'Кофе', 'Фотография', 'Спорт', 'Кино'],
+    verified: true,
+    subscription: 'premium',
+    lastActive: new Date(),
+    settings: {
+      discoverable: true,
+      ageRange: [22, 35],
+      maxDistance: 30,
+      showOnlineStatus: true
+    }
+  };
 
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-8 text-center">
-            <Icon name="User" size={64} className="text-gray-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Профиль недоступен</h2>
-            <p className="text-gray-600 mb-6">Пользователь не найден или не авторизован</p>
-            <div className="space-y-2">
-              <Button 
-                onClick={() => window.location.href = '/auth'}
-                className="w-full bg-love-DEFAULT hover:bg-love-dark"
-              >
-                Войти в систему
-              </Button>
-              <Button 
-                onClick={() => window.location.reload()}
-                variant="outline"
-                className="w-full"
-              >
-                Обновить страницу
-              </Button>
-            </div>
-            <p className="text-xs text-gray-400 mt-4">
-              Debug: User = {user ? 'найден' : 'null'}, Loading = {isLoading ? 'true' : 'false'}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  // Обновляем formData при изменении пользователя
+  useEffect(() => {
+    if (currentUser) {
+      setFormData({
+        name: currentUser.name || '',
+        bio: currentUser.bio || '',
+        age: currentUser.age || 28,
+        interests: currentUser.interests || [],
+        job: '',
+      });
+    }
+  }, [currentUser]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Sidebar - Profile Info */}
@@ -127,28 +126,36 @@ export default function ProfileWeb() {
                 {/* Avatar & Basic Info */}
                 <div className="text-center mb-6">
                   <div className="relative inline-block">
-                    <div className="w-32 h-32 bg-gradient-to-br from-love-light to-love-DEFAULT rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Icon name="User" size={60} className="text-white" />
+                    <div className="w-32 h-32 bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                      {currentUser.photos && currentUser.photos.length > 0 ? (
+                        <img 
+                          src={currentUser.photos[0]} 
+                          alt={currentUser.name}
+                          className="w-32 h-32 rounded-full object-cover"
+                        />
+                      ) : (
+                        <Icon name="User" size={60} className="text-white" />
+                      )}
                     </div>
-                    {user.verified && (
+                    {currentUser.verified && (
                       <div className="absolute -bottom-2 -right-2 bg-blue-500 rounded-full p-3">
                         <Icon name="Shield" size={20} className="text-white" />
                       </div>
                     )}
                   </div>
                   
-                  <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                    {user.name}
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-1">
+                    {currentUser.name}
                   </h2>
                   <p className="text-gray-600 mb-2">
-                    {user.age} лет • {typeof user.location === 'string' ? user.location : user.location?.city || 'Москва'}
+                    {currentUser.age} лет • {typeof currentUser.location === 'string' ? currentUser.location : currentUser.location?.city || 'Москва'}
                   </p>
                   
                   <div className="flex items-center justify-center gap-2 mb-4">
-                    <Badge variant={user.subscription === 'premium' ? 'default' : 'secondary'}>
-                      {user.subscription === 'premium' ? 'Premium' : 'Базовый'}
+                    <Badge variant={currentUser.subscription === 'premium' ? 'default' : 'secondary'}>
+                      {currentUser.subscription === 'premium' ? 'Premium' : 'Базовый'}
                     </Badge>
-                    {user.verified && (
+                    {currentUser.verified && (
                       <Badge className="bg-blue-500">
                         <Icon name="Shield" size={12} className="mr-1" />
                         Верифицирован
@@ -158,7 +165,7 @@ export default function ProfileWeb() {
                   
                   <Button 
                     onClick={() => setIsEditing(!isEditing)}
-                    className="w-full bg-love-DEFAULT hover:bg-love-dark"
+                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
                   >
                     <Icon name="Edit" size={16} className="mr-2" />
                     {isEditing ? 'Отменить' : 'Редактировать профиль'}
@@ -213,7 +220,7 @@ export default function ProfileWeb() {
               <CardContent>
                 {!isEditing ? (
                   <p className="text-gray-700 text-lg leading-relaxed">
-                    {user.bio || 'Пользователь пока не рассказал о себе...'}
+                    {currentUser.bio || 'Пользователь пока не рассказал о себе...'}
                   </p>
                 ) : (
                   <Textarea
@@ -237,12 +244,12 @@ export default function ProfileWeb() {
               <CardContent>
                 {!isEditing ? (
                   <div className="flex flex-wrap gap-3">
-                    {user.interests.map((interest, index) => (
-                      <Badge key={index} variant="secondary" className="px-4 py-2 text-sm">
+                    {(currentUser.interests || []).map((interest, index) => (
+                      <Badge key={index} className="px-4 py-2 text-sm bg-gradient-to-r from-pink-500 to-purple-600 text-white">
                         {interest}
                       </Badge>
                     ))}
-                    {user.interests.length === 0 && (
+                    {(!currentUser.interests || currentUser.interests.length === 0) && (
                       <p className="text-gray-500">Интересы не указаны</p>
                     )}
                   </div>
@@ -258,7 +265,7 @@ export default function ProfileWeb() {
                           variant={formData.interests.includes(interest) ? "default" : "outline"}
                           className={`cursor-pointer transition-colors px-4 py-2 ${
                             formData.interests.includes(interest)
-                              ? 'bg-love-DEFAULT hover:bg-love-dark text-white'
+                              ? 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white'
                               : 'hover:bg-gray-100'
                           }`}
                           onClick={() => toggleInterest(interest)}
@@ -322,7 +329,7 @@ export default function ProfileWeb() {
                   <div className="flex gap-3">
                     <Button 
                       onClick={handleSave}
-                      className="bg-love-DEFAULT hover:bg-love-dark"
+                      className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
                     >
                       <Icon name="Save" size={16} className="mr-2" />
                       Сохранить изменения
@@ -387,8 +394,8 @@ export default function ProfileWeb() {
             </Card>
 
             {/* Premium Features */}
-            {user.subscription !== 'premium' && (
-              <Card className="bg-gradient-to-r from-love-light to-love-DEFAULT text-white">
+            {currentUser.subscription !== 'premium' && (
+              <Card className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4">
                     <div className="bg-white bg-opacity-20 p-3 rounded-full">

@@ -19,7 +19,7 @@ export default function WebLayout({ children }: WebLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100">
       {/* Top Navigation Bar */}
       <header className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -68,7 +68,7 @@ export default function WebLayout({ children }: WebLayoutProps) {
                     className="hidden md:flex items-center space-x-2"
                     onClick={() => navigate('/profile')}
                   >
-                    <div className="w-8 h-8 bg-gradient-to-br from-love-light to-love-DEFAULT rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center">
                       <Icon name="User" size={16} className="text-white" />
                     </div>
                     <span className="text-sm font-medium">{user.name}</span>
@@ -95,7 +95,7 @@ export default function WebLayout({ children }: WebLayoutProps) {
                   </Button>
                   <Button
                     onClick={() => navigate('/auth')}
-                    className="bg-red-500 hover:bg-red-600"
+                    className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
                   >
                     Регистрация
                   </Button>
