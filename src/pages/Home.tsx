@@ -79,7 +79,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Icon name="Heart" className="text-red-500" size={32} />
-            <span className="text-2xl font-bold text-gray-800">LoveConnect</span>
+            <span className="text-2xl font-bold text-gray-800">Noumi Dating</span>
           </div>
           <div className="flex space-x-4">
             <Button variant="ghost" className="text-gray-600">
@@ -300,7 +300,7 @@ export default function Home() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Icon name="Heart" className="text-red-500" size={24} />
-                <span className="text-xl font-bold">LoveConnect</span>
+                <span className="text-xl font-bold">Noumi Dating</span>
               </div>
               <p className="text-gray-400">
                 Самый надежный сайт знакомств для серьезных отношений
