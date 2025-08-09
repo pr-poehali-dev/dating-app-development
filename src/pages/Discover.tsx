@@ -741,6 +741,7 @@ const Discover = () => {
         </div>
       </div>
     </div>
+  );
 };
 
 export default Discover;
