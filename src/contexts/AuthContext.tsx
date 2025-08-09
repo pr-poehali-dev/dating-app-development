@@ -69,81 +69,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Создаём админа и тестового пользователя при первом запуске
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const adminExists = users.find((u: User) => u.email === 'Noumi');
-    const testUserExists = users.find((u: User) => u.email === 'test@test.com');
-    
-    if (!adminExists) {
-      const admin: User = {
-        id: 'admin-1',
-        name: 'Администратор',
-        email: 'Noumi',
-        password: '908908Tolya--Qwe',
-        age: 30,
-        bio: 'Администратор системы',
-        interests: ['Управление'],
-        photos: [],
-        isVerified: true,
-        lastActive: new Date().toISOString(),
-        location: 'Система',
-        role: 'admin'
-      };
-      
-      users.push(admin);
-    }
-
-    // Создаём тестового пользователя для демонстрации профиля
-    if (!testUserExists) {
-      const testUser: User = {
-        id: 'test-user-1',
-        name: 'Иван Петров',
-        email: 'test@test.com',
-        password: 'test123',
-        age: 28,
-        bio: 'Люблю путешествия, фотографию и хорошую компанию. Ищу интересного общения и, возможно, серьёзных отношений. В свободное время занимаюсь спортом и изучаю новые технологии.',
-        interests: ['Путешествия', 'Фотография', 'Спорт', 'Технологии', 'Кино', 'Музыка'],
-        photos: [],
-        verified: true,
-        subscription: 'premium',
-        lastActive: new Date(),
-        location: {
-          lat: 55.7558,
-          lng: 37.6176,
-          city: 'Москва'
-        },
-        role: 'user',
-        zodiac: 'Весы',
-        smoking: 'never',
-        drinking: 'socially',
-        education: 'Высшее образование',
-        work: 'IT-специалист',
-        children: 'want',
-        pets: 'love',
-        height: 180,
-        settings: {
-          discoverable: true,
-          ageRange: [22, 35],
-          maxDistance: 50,
-          showOnlineStatus: true
-        }
-      };
-      
-      users.push(testUser);
-    }
-
-    localStorage.setItem('users', JSON.stringify(users));
-
+    // Проверяем сохранённого пользователя
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
-    } else {
-      // Автоматически логиним тестового пользователя для демонстрации
-      const testUser = users.find((u: User) => u.email === 'test@test.com');
-      if (testUser) {
-        setUser(testUser);
-        localStorage.setItem('currentUser', JSON.stringify(testUser));
-      }
     }
     setIsLoading(false);
   }, []);
