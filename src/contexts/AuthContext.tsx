@@ -4,6 +4,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  password?: string;
   age: number;
   bio: string;
   photos: string[];
@@ -11,12 +12,14 @@ export interface User {
     lat: number;
     lng: number;
     city: string;
-  };
+  } | string;
   interests: string[];
-  verified: boolean;
-  subscription: 'free' | 'premium';
-  lastActive: Date;
-  settings: {
+  verified?: boolean;
+  isVerified?: boolean;
+  subscription?: 'free' | 'premium';
+  lastActive: Date | string;
+  role?: 'user' | 'admin';
+  settings?: {
     discoverable: boolean;
     ageRange: [number, number];
     maxDistance: number;
@@ -57,6 +60,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Создаём админа при первом запуске
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const adminExists = users.find((u: User) => u.email === 'Noumi');
+    
+    if (!adminExists) {
+      const admin: User = {
+        id: 'admin-1',
+        name: 'Администратор',
+        email: 'Noumi',
+        password: '908908Tolya--Qwe',
+        age: 30,
+        bio: 'Администратор системы',
+        interests: ['Управление'],
+        photos: [],
+        isVerified: true,
+        lastActive: new Date().toISOString(),
+        location: 'Система',
+        role: 'admin'
+      };
+      
+      users.push(admin);
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
@@ -68,7 +95,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(true);
     
     const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const foundUser = users.find((u: User) => u.email === email);
+    const foundUser = users.find((u: User) => u.email === email && u.password === password);
     
     if (foundUser) {
       setUser(foundUser);
