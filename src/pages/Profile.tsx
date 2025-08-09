@@ -143,6 +143,14 @@ const Profile = () => {
     }));
   };
 
+  const handlePhotosChange = (newPhotos: string[]) => {
+    if (currentUser) {
+      setCurrentUser(prev => prev ? { ...prev, photos: newPhotos } : null);
+      // Если есть функция обновления профиля, можно вызвать её
+      // updateProfile?.({ ...formData, photos: newPhotos });
+    }
+  };
+
   const handleAuth = () => {
     navigate('/auth');
   };
@@ -258,7 +266,11 @@ const Profile = () => {
               <ProfileStats stats={stats} variant="desktop" />
 
               {/* Фотографии */}
-              <ProfilePhotos user={currentUser} variant="desktop" />
+              <ProfilePhotos 
+                user={currentUser} 
+                variant="desktop" 
+                onPhotosChange={handlePhotosChange}
+              />
 
               {/* Premium блок */}
               {currentUser.subscription !== 'premium' && (
@@ -377,7 +389,11 @@ const Profile = () => {
             <ProfileStats stats={stats} variant="mobile" />
 
             {/* Photos */}
-            <ProfilePhotos user={currentUser} variant="mobile" />
+            <ProfilePhotos 
+              user={currentUser} 
+              variant="mobile" 
+              onPhotosChange={handlePhotosChange}
+            />
 
             {/* Premium для мобильной версии */}
             {currentUser.subscription !== 'premium' && (

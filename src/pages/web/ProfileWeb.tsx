@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import Icon from '@/components/ui/icon';
+import ProfilePhotos from '@/components/profile/ProfilePhotos';
 
 export default function ProfileWeb() {
   const { user, updateProfile, isLoading } = useAuth();
@@ -79,6 +80,11 @@ export default function ProfileWeb() {
         ? prev.interests.filter(i => i !== interest)
         : [...prev.interests, interest]
     }));
+  };
+
+  const handlePhotosChange = (newPhotos: string[]) => {
+    // Здесь можно обновить профиль пользователя с новыми фотографиями
+    console.log('Photos updated:', newPhotos);
   };
 
   // Создаем демо-пользователя если нет авторизованного
@@ -346,52 +352,11 @@ export default function ProfileWeb() {
             )}
 
             {/* Photos */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Icon name="Camera" size={20} />
-                  Фотографии
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
-                  {/* Sample photos */}
-                  <div className="aspect-square bg-gradient-to-br from-pink-200 to-purple-200 rounded-lg flex items-center justify-center relative group cursor-pointer">
-                    <Icon name="User" size={32} className="text-gray-600" />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all flex items-center justify-center">
-                      <Icon name="Edit" size={20} className="text-white opacity-0 group-hover:opacity-100" />
-                    </div>
-                  </div>
-                  <div className="aspect-square bg-gradient-to-br from-blue-200 to-cyan-200 rounded-lg flex items-center justify-center relative group cursor-pointer">
-                    <Icon name="Camera" size={24} className="text-gray-600" />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all flex items-center justify-center">
-                      <Icon name="Edit" size={20} className="text-white opacity-0 group-hover:opacity-100" />
-                    </div>
-                  </div>
-                  <div className="aspect-square bg-gradient-to-br from-green-200 to-emerald-200 rounded-lg flex items-center justify-center relative group cursor-pointer">
-                    <Icon name="Heart" size={24} className="text-gray-600" />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all flex items-center justify-center">
-                      <Icon name="Edit" size={20} className="text-white opacity-0 group-hover:opacity-100" />
-                    </div>
-                  </div>
-                  {Array.from({ length: 3 }).map((_, index) => (
-                    <div
-                      key={index}
-                      className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-love-DEFAULT transition-colors cursor-pointer group"
-                    >
-                      <Icon 
-                        name="Plus" 
-                        size={32} 
-                        className="text-gray-400 group-hover:text-love-DEFAULT" 
-                      />
-                    </div>
-                  ))}
-                </div>
-                <p className="text-sm text-gray-500 mt-4 text-center">
-                  Добавьте до 6 качественных фотографий для лучшего результата
-                </p>
-              </CardContent>
-            </Card>
+            <ProfilePhotos 
+              user={currentUser} 
+              variant="desktop" 
+              onPhotosChange={handlePhotosChange}
+            />
 
             {/* Premium Features */}
             {currentUser.subscription !== 'premium' && (
