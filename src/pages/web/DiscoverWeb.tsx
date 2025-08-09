@@ -301,23 +301,7 @@ export default function DiscoverWeb() {
           </div>
         </div>
 
-        {/* Подсказки по управлению */}
-        <div className="mt-8 text-center">
-          <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
-            <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Icon name="X" size={16} className="text-red-500" />
-              <span>Пропустить</span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Icon name="Star" size={16} className="text-blue-500" />
-              <span>Супер-лайк</span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Icon name="Heart" size={16} className="text-pink-500" />
-              <span>Нравится</span>
-            </div>
-          </div>
-        </div>
+
 
         {/* Последние совпадения (если есть) */}
         {matches.length > 0 && (
