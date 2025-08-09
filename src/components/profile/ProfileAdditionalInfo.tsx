@@ -18,6 +18,41 @@ export default function ProfileAdditionalInfo({ user }: ProfileAdditionalInfoPro
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 gap-3">
+          {/* Основная информация */}
+          <div className="flex items-center justify-between">
+            <span className="text-gray-600 flex items-center">
+              <Icon name="Mail" size={16} className="mr-2" />Email:
+            </span>
+            <Badge variant="outline">{user.email}</Badge>
+          </div>
+          
+          {user.height && (
+            <div className="flex items-center justify-between">
+              <span className="text-gray-600 flex items-center">
+                <Icon name="Ruler" size={16} className="mr-2" />Рост:
+              </span>
+              <Badge variant="outline">{user.height} см</Badge>
+            </div>
+          )}
+          
+          {user.education && (
+            <div className="flex items-center justify-between">
+              <span className="text-gray-600 flex items-center">
+                <Icon name="GraduationCap" size={16} className="mr-2" />Образование:
+              </span>
+              <Badge variant="outline">{user.education}</Badge>
+            </div>
+          )}
+          
+          {user.work && (
+            <div className="flex items-center justify-between">
+              <span className="text-gray-600 flex items-center">
+                <Icon name="Briefcase" size={16} className="mr-2" />Работа:
+              </span>
+              <Badge variant="outline">{user.work}</Badge>
+            </div>
+          )}
+          
           {user.zodiac && (
             <div className="flex items-center justify-between">
               <span className="text-gray-600 flex items-center">
@@ -26,6 +61,31 @@ export default function ProfileAdditionalInfo({ user }: ProfileAdditionalInfoPro
               <Badge variant="outline">{user.zodiac}</Badge>
             </div>
           )}
+          
+          {user.children && (
+            <div className="flex items-center justify-between">
+              <span className="text-gray-600 flex items-center">
+                <Icon name="Baby" size={16} className="mr-2" />Дети:
+              </span>
+              <Badge variant="outline">
+                {user.children === 'none' ? 'Нет детей' : 
+                 user.children === 'have' ? 'Есть дети' : 'Хочу детей'}
+              </Badge>
+            </div>
+          )}
+          
+          {user.pets && (
+            <div className="flex items-center justify-between">
+              <span className="text-gray-600 flex items-center">
+                <Icon name="Heart" size={16} className="mr-2" />Животные:
+              </span>
+              <Badge variant="outline">
+                {user.pets === 'none' ? 'Без животных' : 
+                 user.pets === 'have' ? 'Есть питомцы' : 'Люблю животных'}
+              </Badge>
+            </div>
+          )}
+          
           {user.smoking && (
             <div className="flex items-center justify-between">
               <span className="text-gray-600 flex items-center">
@@ -37,6 +97,7 @@ export default function ProfileAdditionalInfo({ user }: ProfileAdditionalInfoPro
               </Badge>
             </div>
           )}
+          
           {user.drinking && (
             <div className="flex items-center justify-between">
               <span className="text-gray-600 flex items-center">
@@ -48,6 +109,8 @@ export default function ProfileAdditionalInfo({ user }: ProfileAdditionalInfoPro
               </Badge>
             </div>
           )}
+          
+          {/* Активность и геолокация */}
           <div className="flex items-center justify-between">
             <span className="text-gray-600 flex items-center">
               <Icon name="Calendar" size={16} className="mr-2" />Последняя активность:
@@ -56,6 +119,7 @@ export default function ProfileAdditionalInfo({ user }: ProfileAdditionalInfoPro
               Сейчас онлайн
             </Badge>
           </div>
+          
           <div className="flex items-center justify-between">
             <span className="text-gray-600 flex items-center">
               <Icon name="MapPin" size={16} className="mr-2" />Расстояние:

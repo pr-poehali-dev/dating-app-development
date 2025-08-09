@@ -12,6 +12,7 @@ import ProfileStats from '@/components/profile/ProfileStats';
 import ProfileBio from '@/components/profile/ProfileBio';
 import ProfileInterests from '@/components/profile/ProfileInterests';
 import ProfilePhotos from '@/components/profile/ProfilePhotos';
+import ProfileAdditionalInfo from '@/components/profile/ProfileAdditionalInfo';
 import EmptyState from '@/components/profile/EmptyState';
 import LoadingState from '@/components/profile/LoadingState';
 
@@ -272,6 +273,9 @@ const Profile = () => {
                 onPhotosChange={handlePhotosChange}
               />
 
+              {/* Дополнительная информация */}
+              <ProfileAdditionalInfo user={currentUser} />
+
               {/* Premium блок */}
               {currentUser.subscription !== 'premium' && (
                 <Card className="bg-gradient-to-br from-yellow-400 to-orange-500 border-0 shadow-xl text-white">
@@ -394,6 +398,9 @@ const Profile = () => {
               variant="mobile" 
               onPhotosChange={handlePhotosChange}
             />
+
+            {/* Дополнительная информация */}
+            <ProfileAdditionalInfo user={currentUser} />
 
             {/* Premium для мобильной версии */}
             {currentUser.subscription !== 'premium' && (

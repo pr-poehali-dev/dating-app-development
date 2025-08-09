@@ -19,6 +19,15 @@ export interface User {
   subscription?: 'free' | 'premium';
   lastActive: Date | string;
   role?: 'user' | 'admin';
+  // Дополнительная информация из регистрации
+  zodiac?: string;
+  smoking?: 'never' | 'sometimes' | 'often';
+  drinking?: 'never' | 'socially' | 'often';
+  education?: string;
+  work?: string;
+  children?: 'none' | 'have' | 'want';
+  pets?: 'none' | 'have' | 'love';
+  height?: number;
   settings?: {
     discoverable: boolean;
     ageRange: [number, number];
@@ -104,6 +113,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           city: 'Москва'
         },
         role: 'user',
+        zodiac: 'Весы',
+        smoking: 'never',
+        drinking: 'socially',
+        education: 'Высшее образование',
+        work: 'IT-специалист',
+        children: 'want',
+        pets: 'love',
+        height: 180,
         settings: {
           discoverable: true,
           ageRange: [22, 35],
