@@ -22,9 +22,60 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-red-50">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-100 via-purple-50 to-red-100">
+        {/* Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ 
+            backgroundImage: `url('/img/c23d3f96-cfdf-4b77-81c7-9bbfbb8d8a25.jpg')`,
+            backgroundAttachment: 'fixed'
+          }}
+        />
+        
+        {/* Animated Floating Hearts */}
+        <div className="absolute inset-0">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute floating-hearts"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${3 + Math.random() * 2}s`
+              }}
+            >
+              <Icon 
+                name="Heart" 
+                className="text-pink-300 opacity-40 hover:opacity-60 transition-opacity" 
+                size={16 + Math.random() * 16} 
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-white/30" />
+        
+        {/* Moving Particles */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-pink-200 rounded-full opacity-40 particle-move"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${4 + Math.random() * 3}s`
+              }}
+            />
+          ))}
+        </div>
+      </div>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="relative z-10 bg-white/80 backdrop-blur-sm shadow-sm border-b border-white/20">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Icon name="Heart" className="text-red-500" size={32} />
@@ -42,18 +93,18 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-4">
+      <section className="relative z-10 py-20 px-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
-            Найди свою <span className="text-red-500">любовь</span>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 drop-shadow-lg">
+            Найди свою <span className="gradient-text love-pulse">любовь</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-700 mb-12 max-w-2xl mx-auto drop-shadow-sm">
             Более 2 миллионов пользователей уже нашли свою вторую половинку. 
             Присоединяйся и ты!
           </p>
 
           {/* Registration Form */}
-          <Card className="max-w-md mx-auto bg-white shadow-xl border-0">
+          <Card className="max-w-md mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border-0 transform hover:scale-105 transition-all duration-300">
             <CardContent className="p-8">
               <div className="mb-6">
                 <div className="flex rounded-lg bg-gray-100 p-1">
@@ -116,7 +167,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="relative z-10 py-20 bg-white/90 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-16">
             Почему выбирают нас?
