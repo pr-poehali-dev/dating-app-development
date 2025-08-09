@@ -10,6 +10,7 @@ export default function DiscoverWeb() {
   const [profiles, setProfiles] = useState<User[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matches, setMatches] = useState<string[]>([]);
+  const [superLikes, setSuperLikes] = useState(3);
 
   useEffect(() => {
     generateProfiles();
@@ -24,39 +25,57 @@ export default function DiscoverWeb() {
         name: 'Анна',
         email: 'anna@example.com',
         age: 25,
-        bio: 'Люблю путешествия и кофе ☕️ В поисках интересных разговоров и новых приключений',
-        photos: [],
-        location: 'Москва',
-        interests: ['Путешествия', 'Кофе', 'Книги'],
+        bio: 'Люблю путешествия и кофе ☕️ В поисках интересных разговоров и новых приключений. Работаю маркетологом, увлекаюсь йогой и фотографией. Мечтаю посетить Японию и выучить новый язык.',
+        photos: ['/img/4cf46a0e-c3f2-45b0-9806-3c40c852f7c0.jpg'],
+        location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
+        interests: ['Путешествия', 'Кофе', 'Фотография', 'Йога', 'Маркетинг'],
         verified: true,
         subscription: 'premium',
-        lastActive: new Date().toISOString(),
+        lastActive: new Date(),
+        settings: {
+          discoverable: true,
+          ageRange: [22, 35],
+          maxDistance: 30,
+          showOnlineStatus: true
+        }
       },
       {
         id: '2', 
-        name: 'Елена',
-        email: 'elena@example.com',
+        name: 'Максим',
+        email: 'max@example.com',
         age: 28,
-        bio: 'Фотограф и любительница искусства. Ищу того, с кем можно делиться прекрасными моментами',
-        photos: [],
-        location: 'Санкт-Петербург',
-        interests: ['Фотография', 'Искусство', 'Музеи'],
-        verified: true,
+        bio: 'Разработчик и любитель горных лыж 🎿 Ищу кого-то для совместных приключений. Увлекаюсь технологиями, читаю фантастику и обожаю активный отдых на природе.',
+        photos: ['/img/08b3fd97-0dd5-453c-90f6-2d389886b8c3.jpg'],
+        location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
+        interests: ['Программирование', 'Лыжи', 'Книги', 'Кино', 'Технологии'],
+        verified: false,
         subscription: 'free',
-        lastActive: new Date().toISOString(),
+        lastActive: new Date(),
+        settings: {
+          discoverable: true,
+          ageRange: [20, 30],
+          maxDistance: 25,
+          showOnlineStatus: false
+        }
       },
       {
         id: '3',
-        name: 'Мария',
-        email: 'maria@example.com', 
-        age: 23,
-        bio: 'Студентка медицинского института. Люблю активный отдых и здоровый образ жизни',
-        photos: [],
-        location: 'Екатеринбург',
-        interests: ['Спорт', 'Медицина', 'Йога'],
-        verified: false,
-        subscription: 'free',
-        lastActive: new Date().toISOString(),
+        name: 'София',
+        email: 'sofia@example.com',
+        age: 24,
+        bio: 'Художница и мечтательница 🎨 Обожаю закаты и долгие прогулки по городу. Рисую маслом, изучаю историю искусства и мечтаю открыть собственную галерею.',
+        photos: ['/img/24ac872e-a5e0-4cd9-8c6e-bd3052fce428.jpg'],
+        location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
+        interests: ['Искусство', 'Природа', 'Музыка', 'Танцы', 'История'],
+        verified: true,
+        subscription: 'premium',
+        lastActive: new Date(),
+        settings: {
+          discoverable: true,
+          ageRange: [22, 32],
+          maxDistance: 20,
+          showOnlineStatus: true
+        }
       }
     ];
     setProfiles(sampleProfiles);
@@ -64,17 +83,47 @@ export default function DiscoverWeb() {
 
   const currentProfile = profiles[currentIndex];
 
+  const handleSwipe = (direction: 'left' | 'right' | 'up') => {
+    if (!currentProfile) return;
+
+    if (direction === 'right') {
+      handleLike();
+    } else if (direction === 'left') {
+      handlePass();
+    } else if (direction === 'up') {
+      handleSuperLike();
+    }
+
+    setTimeout(() => {
+      nextProfile();
+    }, 300);
+  };
+
   const handleLike = () => {
-    if (currentProfile) {
+    if (!currentProfile) return;
+    
+    const isMatch = Math.random() > 0.7;
+    if (isMatch) {
       const newMatches = [...matches, currentProfile.id];
       setMatches(newMatches);
       localStorage.setItem('matches', JSON.stringify(newMatches));
     }
-    nextProfile();
   };
 
   const handlePass = () => {
-    nextProfile();
+    console.log('Passed on', currentProfile?.name);
+  };
+
+  const handleSuperLike = () => {
+    if (superLikes > 0 && currentProfile) {
+      setSuperLikes(prev => prev - 1);
+      const isMatch = Math.random() > 0.5;
+      if (isMatch) {
+        const newMatches = [...matches, currentProfile.id];
+        setMatches(newMatches);
+        localStorage.setItem('matches', JSON.stringify(newMatches));
+      }
+    }
   };
 
   const nextProfile = () => {
@@ -88,185 +137,225 @@ export default function DiscoverWeb() {
 
   if (!currentProfile) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
-          <Icon name="Heart" size={64} className="text-gray-400 mx-auto mb-4" />
-          <p className="text-xl text-gray-600">Загружаем профили...</p>
+          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
+            <Icon name="Heart" size={32} className="text-white" />
+          </div>
+          <p className="text-gray-600 font-medium">Ищем для вас идеальные совпадения...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100">
+      <div className="container mx-auto px-6 py-8">
+        {/* Заголовок */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Знакомства</h1>
-          <p className="text-gray-600">Находите интересных людей рядом с вами</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            Откройте для себя новых людей
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Найдите свою половинку среди тысяч интересных профилей
+          </p>
         </div>
 
-        <div className="grid lg:grid-cols-5 gap-8">
-          {/* Sidebar with filters */}
-          <div className="lg:col-span-1">
-            <Card className="bg-white shadow-sm">
-              <CardContent className="p-6">
-                <h3 className="font-semibold mb-4">Фильтры</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Возраст
-                    </label>
-                    <div className="text-sm text-gray-600">18 - 35 лет</div>
+        <div className="flex justify-center items-center gap-8">
+          {/* Статистика слева */}
+          <div className="flex flex-col gap-4">
+            <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+              <CardContent className="p-4">
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                    <Icon name="Star" size={24} className="text-white" />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Расстояние
-                    </label>
-                    <div className="text-sm text-gray-600">До 50 км</div>
+                  <div className="text-2xl font-bold text-gray-900">{superLikes}</div>
+                  <div className="text-sm text-gray-600">Супер-лайки</div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+              <CardContent className="p-4">
+                <div className="text-center">
+                  <div className="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-pink-400 to-red-500 rounded-full flex items-center justify-center">
+                    <Icon name="Heart" size={24} className="text-white" />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Интересы
-                    </label>
-                    <div className="flex flex-wrap gap-1">
-                      <Badge variant="outline" className="text-xs">Путешествия</Badge>
-                      <Badge variant="outline" className="text-xs">Спорт</Badge>
-                      <Badge variant="outline" className="text-xs">Искусство</Badge>
-                    </div>
-                  </div>
+                  <div className="text-2xl font-bold text-gray-900">{matches.length + 12}</div>
+                  <div className="text-sm text-gray-600">Совпадения</div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Main profile card */}
-          <div className="lg:col-span-3">
-            <Card className="bg-white shadow-lg overflow-hidden">
-              {/* Profile Image */}
-              <div className="relative h-96 bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 flex items-center justify-center">
-                <Icon name="User" size={120} className="text-gray-600" />
-                <div className="absolute top-4 right-4">
+          {/* Основная карточка профиля */}
+          <div className="relative">
+            <Card className="w-96 h-[600px] bg-white/95 backdrop-blur-sm border-0 shadow-2xl overflow-hidden">
+              {/* Фото профиля */}
+              <div 
+                className="h-2/3 bg-cover bg-center relative"
+                style={{ 
+                  backgroundImage: currentProfile.photos && currentProfile.photos.length > 0 
+                    ? `url(${currentProfile.photos[0]})` 
+                    : undefined,
+                  backgroundColor: !currentProfile.photos || currentProfile.photos.length === 0 
+                    ? undefined 
+                    : 'transparent'
+                }}
+              >
+                {(!currentProfile.photos || currentProfile.photos.length === 0) && (
+                  <div className="w-full h-full bg-gradient-to-br from-pink-200 via-purple-200 to-indigo-300 flex items-center justify-center">
+                    <Icon name="User" size={80} className="text-gray-600" />
+                  </div>
+                )}
+                
+                {/* Индикаторы статуса */}
+                <div className="absolute top-4 left-4 flex gap-2">
                   {currentProfile.verified && (
-                    <Badge className="bg-blue-500">
-                      <Icon name="Shield" size={12} className="mr-1" />
-                      Верифицирован
+                    <Badge className="bg-blue-500/90 backdrop-blur-sm border-0">
+                      <Icon name="ShieldCheck" size={14} className="mr-1" />
+                      Проверен
+                    </Badge>
+                  )}
+                  {currentProfile.subscription === 'premium' && (
+                    <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 border-0">
+                      <Icon name="Crown" size={14} className="mr-1" />
+                      Premium
                     </Badge>
                   )}
                 </div>
-                <div className="absolute bottom-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
-                  📍 {currentProfile.location}
+
+                {/* Индикатор онлайн */}
+                <div className="absolute top-4 right-4">
+                  <div className="w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
+                </div>
+
+                {/* Локация */}
+                <div className="absolute bottom-4 left-4">
+                  <Badge className="bg-black/50 backdrop-blur-sm border-0 text-white">
+                    <Icon name="MapPin" size={12} className="mr-1" />
+                    {typeof currentProfile.location === 'string' ? currentProfile.location : currentProfile.location?.city || 'Неизвестно'}
+                  </Badge>
                 </div>
               </div>
 
-              <CardContent className="p-8">
-                {/* Profile Info */}
-                <div className="mb-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-3xl font-bold text-gray-900">
+              {/* Информация профиля */}
+              <CardContent className="p-6 h-1/3 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                       {currentProfile.name}, {currentProfile.age}
                     </h2>
-                    <Badge variant={currentProfile.subscription === 'premium' ? 'default' : 'secondary'}>
-                      {currentProfile.subscription === 'premium' ? 'Premium' : 'Базовый'}
-                    </Badge>
                   </div>
                   
-                  <p className="text-gray-700 text-lg mb-6 leading-relaxed">
+                  <p className="text-gray-700 text-sm mb-3 line-clamp-3">
                     {currentProfile.bio}
                   </p>
 
-                  {/* Interests */}
-                  <div className="mb-6">
-                    <h4 className="font-medium text-gray-900 mb-3">Интересы:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {currentProfile.interests.map((interest, index) => (
-                        <Badge key={index} variant="secondary" className="px-3 py-1">
-                          {interest}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center justify-center gap-6">
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      onClick={handlePass}
-                      className="w-16 h-16 rounded-full border-gray-300 hover:border-gray-400"
-                    >
-                      <Icon name="X" size={24} className="text-gray-600" />
-                    </Button>
-                    
-                    <Button
-                      size="lg"
-                      onClick={handleLike}
-                      className="w-20 h-20 rounded-full bg-red-500 hover:bg-red-600 text-white"
-                    >
-                      <Icon name="Heart" size={32} />
-                    </Button>
-                    
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="w-16 h-16 rounded-full border-blue-300 hover:border-blue-400"
-                    >
-                      <Icon name="Star" size={24} className="text-blue-500" />
-                    </Button>
+                  {/* Интересы */}
+                  <div className="flex flex-wrap gap-1">
+                    {currentProfile.interests?.slice(0, 3).map((interest, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs">
+                        {interest}
+                      </Badge>
+                    ))}
+                    {currentProfile.interests && currentProfile.interests.length > 3 && (
+                      <Badge variant="secondary" className="text-xs">
+                        +{currentProfile.interests.length - 3}
+                      </Badge>
+                    )}
                   </div>
                 </div>
               </CardContent>
             </Card>
-
-            {/* Action Tips */}
-            <div className="mt-6 text-center">
-              <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
-                <div className="flex items-center gap-2">
-                  <Icon name="X" size={16} />
-                  <span>Пропустить</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Icon name="Heart" size={16} className="text-red-500" />
-                  <span>Нравится</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Icon name="Star" size={16} className="text-blue-500" />
-                  <span>Супер лайк</span>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Right sidebar with recent matches */}
-          <div className="lg:col-span-1">
-            <Card className="bg-white shadow-sm">
+          {/* Кнопки действий справа */}
+          <div className="flex flex-col gap-4">
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => handleSwipe('left')}
+              className="w-16 h-16 rounded-full border-2 border-red-200 hover:border-red-400 hover:bg-red-50 transition-all duration-200"
+            >
+              <Icon name="X" size={28} className="text-red-500" />
+            </Button>
+            
+            <Button
+              size="lg"
+              onClick={() => handleSwipe('up')}
+              disabled={superLikes === 0}
+              className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 disabled:opacity-50"
+            >
+              <Icon name="Star" size={28} className="text-white" />
+            </Button>
+            
+            <Button
+              size="lg"
+              onClick={() => handleSwipe('right')}
+              className="w-20 h-20 rounded-full bg-gradient-to-br from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 transition-all duration-200 shadow-lg"
+            >
+              <Icon name="Heart" size={32} className="text-white" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Подсказки по управлению */}
+        <div className="mt-8 text-center">
+          <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
+            <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full">
+              <Icon name="X" size={16} className="text-red-500" />
+              <span>Пропустить</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full">
+              <Icon name="Star" size={16} className="text-blue-500" />
+              <span>Супер-лайк</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full">
+              <Icon name="Heart" size={16} className="text-pink-500" />
+              <span>Нравится</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Последние совпадения (если есть) */}
+        {matches.length > 0 && (
+          <div className="mt-8 max-w-md mx-auto">
+            <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
               <CardContent className="p-6">
-                <h3 className="font-semibold mb-4">Новые совпадения</h3>
-                <div className="space-y-3">
-                  {matches.slice(-3).map((matchId, index) => {
+                <h3 className="text-lg font-semibold mb-4 text-center bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+                  🎉 Новые совпадения
+                </h3>
+                <div className="flex -space-x-2 justify-center">
+                  {matches.slice(-5).map((matchId, index) => {
                     const matchProfile = profiles.find(p => p.id === matchId);
                     return matchProfile ? (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center">
+                      <div 
+                        key={index} 
+                        className="w-10 h-10 bg-gradient-to-br from-pink-200 to-purple-300 rounded-full border-2 border-white flex items-center justify-center shadow-lg"
+                        title={matchProfile.name}
+                      >
+                        {matchProfile.photos && matchProfile.photos.length > 0 ? (
+                          <img 
+                            src={matchProfile.photos[0]} 
+                            alt={matchProfile.name}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                        ) : (
                           <Icon name="User" size={20} className="text-gray-600" />
-                        </div>
-                        <div>
-                          <div className="font-medium text-sm">{matchProfile.name}</div>
-                          <div className="text-xs text-gray-500">Новое совпадение</div>
-                        </div>
+                        )}
                       </div>
                     ) : null;
                   })}
-                  {matches.length === 0 && (
-                    <p className="text-sm text-gray-500 text-center py-4">
-                      Пока нет совпадений
-                    </p>
-                  )}
                 </div>
+                <p className="text-sm text-gray-600 text-center mt-3">
+                  У вас {matches.length} взаимных симпатий
+                </p>
               </CardContent>
             </Card>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
