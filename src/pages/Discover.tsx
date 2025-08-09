@@ -21,68 +21,11 @@ const Discover = () => {
   }, [user]);
 
   const generateProfiles = () => {
-    const sampleProfiles: User[] = [
-      {
-        id: '1',
-        name: 'Анна',
-        email: 'anna@example.com',
-        age: 25,
-        bio: 'Люблю путешествия и кофе ☕️ В поисках интересных разговоров и новых приключений',
-        photos: ['/img/4cf46a0e-c3f2-45b0-9806-3c40c852f7c0.jpg'],
-        location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
-        interests: ['Путешествия', 'Кофе', 'Фотография', 'Йога'],
-        verified: true,
-        subscription: 'premium',
-        lastActive: new Date(),
-        settings: {
-          discoverable: true,
-          ageRange: [22, 35],
-          maxDistance: 30,
-          showOnlineStatus: true
-        }
-      },
-      {
-        id: '2',
-        name: 'Максим',
-        email: 'max@example.com',
-        age: 28,
-        bio: 'Разработчик и любитель горных лыж 🎿 Ищу кого-то для совместных приключений',
-        photos: ['/img/08b3fd97-0dd5-453c-90f6-2d389886b8c3.jpg'],
-        location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
-        interests: ['Программирование', 'Лыжи', 'Книги', 'Кино'],
-        verified: false,
-        subscription: 'free',
-        lastActive: new Date(),
-        settings: {
-          discoverable: true,
-          ageRange: [20, 30],
-          maxDistance: 25,
-          showOnlineStatus: false
-        }
-      },
-      {
-        id: '3',
-        name: 'София',
-        email: 'sofia@example.com',
-        age: 24,
-        bio: 'Художница и мечтательница 🎨 Обожаю закаты и долгие прогулки по городу',
-        photos: ['/img/24ac872e-a5e0-4cd9-8c6e-bd3052fce428.jpg'],
-        location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
-        interests: ['Искусство', 'Природа', 'Музыка', 'Танцы'],
-        verified: true,
-        subscription: 'premium',
-        lastActive: new Date(),
-        settings: {
-          discoverable: true,
-          ageRange: [22, 32],
-          maxDistance: 20,
-          showOnlineStatus: true
-        }
-      }
-    ];
+    // Пустой массив - теперь только реальные пользователи
+    const realProfiles: User[] = [];
     
     // Фильтруем уже просмотренные анкеты
-    const filteredProfiles = sampleProfiles.filter(profile => 
+    const filteredProfiles = realProfiles.filter(profile => 
       !viewedProfiles.includes(profile.id)
     );
     

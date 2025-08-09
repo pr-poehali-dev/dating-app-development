@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Home from "./pages/Home";
 import HomeWeb from "./pages/web/HomeWeb";
+import LandingPage from "./pages/LandingPage";
 import Auth from "./pages/Auth";
 import Discover from "./pages/Discover";
 import DiscoverWeb from "./pages/web/DiscoverWeb";
@@ -56,7 +57,7 @@ const AppContent = () => {
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={user ? <Navigate to="/discover" /> : <HomeComponent />} />
+        <Route path="/" element={user ? <Navigate to="/discover" /> : <LandingPage />} />
         <Route path="/auth" element={user ? <Navigate to="/discover" /> : <Auth />} />
         <Route path="/discover" element={<ProtectedRoute><DiscoverComponent /></ProtectedRoute>} />
         <Route path="/matches" element={<ProtectedRoute><MatchesComponent /></ProtectedRoute>} />
