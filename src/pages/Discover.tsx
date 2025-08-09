@@ -10,12 +10,15 @@ const Discover = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matches, setMatches] = useState<string[]>([]);
   const [superLikes, setSuperLikes] = useState(3);
+  const [viewedProfiles, setViewedProfiles] = useState<string[]>([]);
 
   useEffect(() => {
     generateProfiles();
     const savedMatches = JSON.parse(localStorage.getItem('matches') || '[]');
     setMatches(savedMatches);
-  }, []);
+    const savedViewed = JSON.parse(localStorage.getItem(`viewedProfiles_${user?.id}`) || '[]');
+    setViewedProfiles(savedViewed);
+  }, [user]);
 
   const generateProfiles = () => {
     const sampleProfiles: User[] = [
@@ -77,13 +80,29 @@ const Discover = () => {
         }
       }
     ];
-    setProfiles(sampleProfiles);
+    
+    // Фильтруем уже просмотренные анкеты
+    const filteredProfiles = sampleProfiles.filter(profile => 
+      !viewedProfiles.includes(profile.id)
+    );
+    
+    setProfiles(filteredProfiles);
+    setCurrentIndex(0);
   };
 
   const currentProfile = profiles[currentIndex];
 
+  const markAsViewed = (profileId: string) => {
+    if (!user) return;
+    const updated = [...viewedProfiles, profileId];
+    setViewedProfiles(updated);
+    localStorage.setItem(`viewedProfiles_${user.id}`, JSON.stringify(updated));
+  };
+
   const handleSwipe = (direction: 'left' | 'right' | 'up') => {
     if (!currentProfile) return;
+
+    markAsViewed(currentProfile.id);
 
     if (direction === 'right') {
       handleLike();
@@ -94,7 +113,11 @@ const Discover = () => {
     }
 
     setTimeout(() => {
-      setCurrentIndex(prev => (prev + 1) % profiles.length);
+      if (currentIndex + 1 >= profiles.length) {
+        generateProfiles();
+      } else {
+        setCurrentIndex(prev => prev + 1);
+      }
     }, 300);
   };
 
