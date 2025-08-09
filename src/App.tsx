@@ -11,7 +11,9 @@ import Auth from "./pages/Auth";
 import Discover from "./pages/Discover";
 import DiscoverWeb from "./pages/web/DiscoverWeb";
 import Matches from "./pages/Matches";
+import MatchesWeb from "./pages/web/MatchesWeb";
 import Chat from "./pages/Chat";
+import ChatWeb from "./pages/web/ChatWeb";
 import Profile from "./pages/Profile";
 import ProfileWeb from "./pages/web/ProfileWeb";
 import Settings from "./pages/Settings";
@@ -48,6 +50,8 @@ const AppContent = () => {
   const HomeComponent = isTouch ? Home : HomeWeb;
   const ProfileComponent = isTouch ? Profile : ProfileWeb;
   const DiscoverComponent = isTouch ? Discover : DiscoverWeb;
+  const MatchesComponent = isTouch ? Matches : MatchesWeb;
+  const ChatComponent = isTouch ? Chat : ChatWeb;
 
   return (
     <Layout>
@@ -55,8 +59,8 @@ const AppContent = () => {
         <Route path="/" element={user ? <Navigate to="/discover" /> : <HomeComponent />} />
         <Route path="/auth" element={user ? <Navigate to="/discover" /> : <Auth />} />
         <Route path="/discover" element={<ProtectedRoute><DiscoverComponent /></ProtectedRoute>} />
-        <Route path="/matches" element={<ProtectedRoute><Matches /></ProtectedRoute>} />
-        <Route path="/chat/:id?" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+        <Route path="/matches" element={<ProtectedRoute><MatchesComponent /></ProtectedRoute>} />
+        <Route path="/chat/:id?" element={<ProtectedRoute><ChatComponent /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfileComponent /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
