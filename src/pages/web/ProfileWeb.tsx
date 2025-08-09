@@ -17,7 +17,6 @@ export default function ProfileWeb() {
     bio: user?.bio || '',
     age: user?.age || 18,
     interests: user?.interests || [],
-    height: user?.height || 170,
     job: user?.job || '',
   });
 
@@ -261,17 +260,7 @@ export default function ProfileWeb() {
                         className="mt-3"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="height">Рост: {formData.height} см</Label>
-                      <Slider
-                        value={[formData.height]}
-                        onValueChange={([value]) => setFormData(prev => ({ ...prev, height: value }))}
-                        min={140}
-                        max={220}
-                        step={1}
-                        className="mt-3"
-                      />
-                    </div>
+
                   </div>
                   
                   <div className="flex gap-3">
