@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useGesture } from 'use-gesture';
+import { useGesture } from '@use-gesture/react';
 
 export interface SwipeOptions {
   onSwipeLeft?: () => void;
