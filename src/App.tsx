@@ -19,7 +19,7 @@ import Profile from "./pages/Profile";
 import ProfileWeb from "./pages/web/ProfileWeb";
 import Settings from "./pages/Settings";
 import Admin from "./pages/Admin";
-import Navigation from "./components/Navigation";
+
 import NotFound from "./pages/NotFound";
 import WebLayout from "./components/layouts/WebLayout";
 import TouchLayout from "./components/layouts/TouchLayout";
@@ -55,19 +55,17 @@ const AppContent = () => {
   const ChatComponent = isTouch ? Chat : ChatWeb;
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={user ? <Navigate to="/discover" /> : <LandingPage />} />
-        <Route path="/auth" element={user ? <Navigate to="/discover" /> : <Auth />} />
-        <Route path="/discover" element={<ProtectedRoute><DiscoverComponent /></ProtectedRoute>} />
-        <Route path="/matches" element={<ProtectedRoute><MatchesComponent /></ProtectedRoute>} />
-        <Route path="/chat/:id?" element={<ProtectedRoute><ChatComponent /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><ProfileComponent /></ProtectedRoute>} />
-        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-        <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      <Route path="/" element={user ? <Navigate to="/discover" /> : <LandingPage />} />
+      <Route path="/auth" element={user ? <Navigate to="/discover" /> : <Auth />} />
+      <Route path="/discover" element={<Layout><ProtectedRoute><DiscoverComponent /></ProtectedRoute></Layout>} />
+      <Route path="/matches" element={<Layout><ProtectedRoute><MatchesComponent /></ProtectedRoute></Layout>} />
+      <Route path="/chat/:id?" element={<Layout><ProtectedRoute><ChatComponent /></ProtectedRoute></Layout>} />
+      <Route path="/profile" element={<Layout><ProtectedRoute><ProfileComponent /></ProtectedRoute></Layout>} />
+      <Route path="/settings" element={<Layout><ProtectedRoute><Settings /></ProtectedRoute></Layout>} />
+      <Route path="/admin" element={<Layout><ProtectedRoute><Admin /></ProtectedRoute></Layout>} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 
