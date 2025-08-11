@@ -69,6 +69,41 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Создаем админа если его еще нет
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const adminExists = users.find((u: User) => u.email === 'swi79@bk.ru');
+    
+    if (!adminExists) {
+      const adminUser: User = {
+        id: 'admin-001',
+        name: 'Администратор',
+        email: 'swi79@bk.ru',
+        password: '908908Tolya--Qwe',
+        age: 35,
+        bio: 'Администратор системы NoumiDating',
+        photos: [],
+        location: {
+          lat: 55.7558,
+          lng: 37.6176,
+          city: 'Москва'
+        },
+        interests: ['Администрирование', 'Техподдержка'],
+        verified: true,
+        subscription: 'premium',
+        lastActive: new Date(),
+        role: 'admin',
+        settings: {
+          discoverable: false,
+          ageRange: [18, 65],
+          maxDistance: 100,
+          showOnlineStatus: false
+        }
+      };
+      
+      users.push(adminUser);
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+
     // Проверяем сохранённого пользователя
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
