@@ -238,30 +238,7 @@ export const CallProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  // Симуляция случайных входящих звонков для демонстрации
-  useEffect(() => {
-    const simulateRandomCall = () => {
-      if (!callState.isIncoming && !callState.isOutgoing && !callState.isConnected && user) {
-        const callers = [
-          { id: '1', name: 'Анна' },
-          { id: '2', name: 'Максим' },
-          { id: '3', name: 'София' },
-          { id: '4', name: 'Елена' },
-          { id: '5', name: 'Дмитрий' }
-        ];
-        
-        const randomCaller = callers[Math.floor(Math.random() * callers.length)];
-        
-        // Случайный входящий звонок с вероятностью
-        if (Math.random() < 0.3) {
-          receiveIncomingCall(randomCaller);
-        }
-      }
-    };
-
-    const interval = setInterval(simulateRandomCall, 60000); // Каждую минуту проверяем
-    return () => clearInterval(interval);
-  }, [callState, user]);
+  // Убрана симуляция звонков - только реальные звонки от пользователей
 
   useEffect(() => {
     return () => {

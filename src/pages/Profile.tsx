@@ -71,32 +71,13 @@ const Profile = () => {
           interests: user.interests || [],
         });
       } else {
-        // Создаем демо-пользователя для показа
-        const demoUser: User = {
-          id: 'demo-user',
-          name: 'Иван Петров',
-          email: 'ivan@example.com',
-          age: 28,
-          bio: 'Разработчик из Москвы 💻 Люблю путешествия, кофе и интересные разговоры. В поисках серьёзных отношений и новых впечатлений ✨',
-          photos: ['/img/4cf46a0e-c3f2-45b0-9806-3c40c852f7c0.jpg'],
-          location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
-          interests: ['Путешествия', 'Технологии', 'Кофе', 'Фотография', 'Спорт', 'Кино'],
-          verified: true,
-          subscription: 'premium',
-          lastActive: new Date(),
-          settings: {
-            discoverable: true,
-            ageRange: [22, 35],
-            maxDistance: 30,
-            showOnlineStatus: true
-          }
-        };
-        setCurrentUser(demoUser);
+        // Не показываем профиль для неавторизованных пользователей
+        setCurrentUser(null);
         setFormData({
-          name: demoUser.name,
-          bio: demoUser.bio || '',
-          age: demoUser.age,
-          interests: demoUser.interests,
+          name: '',
+          bio: '',
+          age: 25,
+          interests: [],
         });
       }
       

@@ -53,46 +53,8 @@ export default function ChatWeb() {
   }, [chatId, chatPreviews]);
 
   const generateChatPreviews = () => {
-    const sampleUsers = [
-      { id: '1', name: 'Анна', age: 25, bio: 'Люблю путешествия и кофе ☕️', interests: ['Путешествия', 'Кофе'], verified: true, isOnline: true },
-      { id: '2', name: 'Максим', age: 28, bio: 'Спортсмен и любитель приключений', interests: ['Спорт', 'Приключения'], verified: false, isOnline: false, lastSeen: new Date(Date.now() - 1000 * 60 * 15) },
-      { id: '3', name: 'София', age: 23, bio: 'Художница в душе', interests: ['Искусство'], verified: true, isOnline: true },
-      { id: '4', name: 'Елена', age: 26, bio: 'Фотограф и любительница искусства', interests: ['Фотография'], verified: true, isOnline: false, lastSeen: new Date(Date.now() - 1000 * 60 * 60 * 2) },
-      { id: '5', name: 'Дмитрий', age: 30, bio: 'Программист и музыкант', interests: ['Программирование', 'Музыка'], verified: false, isOnline: true }
-    ];
-
-    const savedChats = JSON.parse(localStorage.getItem('chats') || '{}');
-    const deletedChats = JSON.parse(localStorage.getItem('deletedChats') || '[]');
-    
-    // Показываем только чаты с сообщениями И которые не были удалены
-    const previews = sampleUsers
-      .filter(userData => {
-        const hasMessages = savedChats[userData.id] && savedChats[userData.id].length > 0;
-        const isDeleted = deletedChats.includes(userData.id);
-        return hasMessages && !isDeleted;
-      })
-      .map(userData => {
-        const chatMessages = savedChats[userData.id] || [];
-        const lastMessage = chatMessages.length > 0 ? {
-          ...chatMessages[chatMessages.length - 1],
-          timestamp: new Date(chatMessages[chatMessages.length - 1].timestamp)
-        } : null;
-
-        return {
-          id: userData.id,
-          user: {
-            ...userData,
-            email: `${userData.name.toLowerCase()}@example.com`,
-            photos: [],
-            location: 'Москва',
-            subscription: Math.random() > 0.7 ? 'premium' : 'free',
-            lastActive: new Date(),
-          } as ChatUser,
-          lastMessage,
-          unreadCount: Math.floor(Math.random() * 4)
-        };
-      });
-
+    // Здесь должна быть загрузка реальных чатов из API
+    const previews: ChatPreview[] = [];
     setChatPreviews(previews);
   };
 
@@ -168,38 +130,8 @@ export default function ChatWeb() {
   };
 
   const simulateResponse = (chatId: string, currentMessages: Message[]) => {
-    if (!chatUser) return;
-
-    setIsTyping(true);
-    
-    setTimeout(() => {
-      const responses = [
-        'Привет! Как дела? 😊',
-        'Очень приятно познакомиться!',
-        'Какие у тебя планы на выходные?',
-        'Мне тоже нравится путешествовать ✈️',
-        'Может встретимся на кофе? ☕️',
-        'Какая интересная мысль!',
-        'Хочешь созвониться? 📞',
-        'А что ещё любишь делать в свободное время?',
-        'Звучит здорово! Расскажи подробнее 🤔',
-        'Я тоже об этом думал(а)!'
-      ];
-
-      const response: Message = {
-        id: Date.now().toString(),
-        senderId: chatUser.id,
-        text: responses[Math.floor(Math.random() * responses.length)],
-        timestamp: new Date(),
-        type: 'text',
-        status: 'delivered'
-      };
-
-      const newMessages = [...currentMessages, response];
-      setMessages(newMessages);
-      saveChat(chatId, newMessages);
-      setIsTyping(false);
-    }, 1000 + Math.random() * 2000);
+    // Убрана симуляция ответов - только реальные сообщения от пользователей
+    return;
   };
 
 

@@ -58,16 +58,8 @@ const Chat = () => {
   };
 
   const loadChatUser = (chatId: string) => {
-    const users = [
-      { id: '1', name: 'Анна', age: 25, isOnline: true, verified: true },
-      { id: '2', name: 'Максим', age: 28, isOnline: false, verified: false, lastSeen: new Date(Date.now() - 1000 * 60 * 15) },
-      { id: '3', name: 'София', age: 23, isOnline: true, verified: true },
-      { id: '4', name: 'Елена', age: 26, isOnline: false, verified: true, lastSeen: new Date(Date.now() - 1000 * 60 * 60 * 2) },
-      { id: '5', name: 'Дмитрий', age: 30, isOnline: true, verified: false }
-    ];
-    
-    const foundUser = users.find(u => u.id === chatId);
-    setChatUser(foundUser || { id: chatId, name: `Пользователь ${chatId}`, isOnline: false });
+    // Здесь должна быть загрузка реального пользователя из API
+    setChatUser(null);
   };
 
   const saveChat = (chatId: string, messages: Message[]) => {
@@ -105,36 +97,8 @@ const Chat = () => {
 
     setIsTyping(true);
     
-    setTimeout(() => {
-      const responses = [
-        'Привет! Как дела? 😊',
-        'Очень приятно познакомиться!',
-        'Какие у тебя планы на выходные?',
-        'Мне тоже нравится путешествовать ✈️',
-        'Может встретимся на кофе? ☕️',
-        'Какая интересная мысль!',
-        'Хочешь созвониться? 📞',
-        'А что ещё любишь делать в свободное время?',
-        'Звучит здорово! Расскажи подробнее 🤔',
-        'Я тоже об этом думал(а)!',
-        'Отличная идея! 👍',
-        'Мне нравится твой подход к жизни'
-      ];
-
-      const response: Message = {
-        id: Date.now().toString(),
-        senderId: chatUser.id,
-        text: responses[Math.floor(Math.random() * responses.length)],
-        timestamp: new Date(),
-        type: 'text',
-        status: 'delivered'
-      };
-
-      const newMessages = [...currentMessages, response];
-      setMessages(newMessages);
-      saveChat(chatId, newMessages);
-      setIsTyping(false);
-    }, 800 + Math.random() * 2000);
+    // Убрана симуляция автоответов - только реальные сообщения
+    return;
   };
 
   const startVideoCall = () => {
