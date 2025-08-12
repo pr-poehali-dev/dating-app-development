@@ -243,17 +243,17 @@ const ProfileCard = ({
               </div>
               <div className={cn(
                 "flex items-center gap-2 px-3 py-1 rounded-full text-sm",
-                profile.settings.showOnlineStatus 
+                profile.settings?.showOnlineStatus 
                   ? "bg-green-100 text-green-700" 
                   : "bg-gray-100 text-gray-600",
                 variant === 'tablet' && "px-2 py-1 text-xs gap-1"
               )}>
                 <div className={cn(
                   "w-2 h-2 rounded-full",
-                  profile.settings.showOnlineStatus ? "bg-green-500 animate-pulse" : "bg-gray-400"
+                  profile.settings?.showOnlineStatus ? "bg-green-500 animate-pulse" : "bg-gray-400"
                 )} />
                 <span className="font-medium">
-                  {profile.settings.showOnlineStatus ? 'Онлайн' : variant === 'tablet' ? 'Недавно' : 'Недавно'}
+                  {profile.settings?.showOnlineStatus ? 'Онлайн' : variant === 'tablet' ? 'Недавно' : 'Недавно'}
                 </span>
               </div>
             </div>
