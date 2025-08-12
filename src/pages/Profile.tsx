@@ -33,7 +33,7 @@ interface Stats {
 }
 
 const Profile = () => {
-  const { user, updateProfile } = useAuth();
+  const { user, updateProfile, logout } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isDetailedEditing, setIsDetailedEditing] = useState(false);
@@ -158,7 +158,8 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    if (user) {
+    if (logout) {
+      logout();
       navigate('/auth');
     }
   };
