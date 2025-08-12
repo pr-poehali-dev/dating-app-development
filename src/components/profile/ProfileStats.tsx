@@ -29,7 +29,7 @@ const ProfileStats = ({ stats, variant = 'mobile' }: ProfileStatsProps) => {
     color: string; 
     bgColor: string; 
   }) => {
-    // Не показываем статистику с нулевыми значениями
+    // Показываем только реальную статистику (больше 0)
     if (value === 0) {
       return null;
     }
