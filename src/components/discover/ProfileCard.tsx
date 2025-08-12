@@ -2,8 +2,10 @@ import { motion } from 'framer-motion';
 import { User } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfileCardProps {
   profile: User;
@@ -24,6 +26,7 @@ const ProfileCard = ({
   onTouchEnd,
   variant = 'mobile'
 }: ProfileCardProps) => {
+  const navigate = useNavigate();
   const getSwipeColor = () => {
     if (!swipeDirection) return 'transparent';
     if (swipeDirection === 'right') return '#10B981';
@@ -436,7 +439,16 @@ const ProfileCard = ({
 
           {/* Подсказка для свайпа только на мобильной версии */}
           {showSwipeHints && (
-            <div className="text-center">
+            <div className="text-center space-y-3">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => navigate(`/user/${profile.id}`)}
+                className="w-full border-purple-200 hover:bg-purple-50 text-purple-600"
+              >
+                <Icon name="User" size={16} className="mr-2" />
+                Посмотреть профиль
+              </Button>
               <div className="flex items-center justify-center gap-4 text-xs text-gray-400 bg-gray-50 rounded-full py-2 px-4">
                 <div className="flex items-center gap-1">
                   <Icon name="ArrowLeft" size={14} />

@@ -1,5 +1,20 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
+export interface FriendRequest {
+  id: string;
+  from: string; // ID пользователя
+  to: string; // ID пользователя
+  status: 'pending' | 'accepted' | 'rejected';
+  createdAt: Date | string;
+}
+
+export interface Friendship {
+  id: string;
+  user1: string; // ID пользователя
+  user2: string; // ID пользователя
+  createdAt: Date | string;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -58,6 +73,13 @@ export interface User {
     ageRange: [number, number];
     maxDistance: number;
     showOnlineStatus: boolean;
+  };
+  
+  // Дружба и уведомления
+  friends?: string[]; // массив ID друзей
+  friendRequests?: {
+    sent: string[]; // ID отправленных заявок
+    received: string[]; // ID полученных заявок
   };
 }
 
