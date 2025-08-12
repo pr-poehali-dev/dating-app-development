@@ -258,35 +258,73 @@ const ProfileCard = ({
               </div>
             </div>
 
+            {/* Краткая дополнительная информация */}
+            <div className="space-y-2 mb-3">
+              {profile.height && (
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Icon name="Ruler" size={14} />
+                  <span className="text-sm">{profile.height} см</span>
+                  {profile.bodyType && (
+                    <span className="text-sm">• {
+                      profile.bodyType === 'slim' ? 'Стройное' :
+                      profile.bodyType === 'athletic' ? 'Спортивное' :
+                      profile.bodyType === 'average' ? 'Среднее' :
+                      profile.bodyType === 'curvy' ? 'Пышное' : 'Крупное'
+                    }</span>
+                  )}
+                </div>
+              )}
+              
+              {profile.work && (
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Icon name="Briefcase" size={14} />
+                  <span className="text-sm line-clamp-1">{profile.work}</span>
+                </div>
+              )}
+              
+              {profile.education && (
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Icon name="GraduationCap" size={14} />
+                  <span className="text-sm">
+                    {profile.education === 'school' && 'Среднее'}
+                    {profile.education === 'college' && 'Колледж'}
+                    {profile.education === 'bachelor' && 'Бакалавр'}
+                    {profile.education === 'master' && 'Магистр'}
+                    {profile.education === 'phd' && 'Кандидат наук'}
+                  </span>
+                </div>
+              )}
+            </div>
+
             <p className={cn(
-              "text-gray-700 line-clamp-2 leading-relaxed mb-4",
+              "text-gray-700 line-clamp-2 leading-relaxed mb-3",
               textSizes[variant].bio
             )}>
               {profile.bio}
             </p>
 
             <div className="flex flex-wrap gap-2">
-              {profile.interests.slice(0, variant === 'tablet' ? 3 : 4).map((interest, index) => (
+              {profile.interests.slice(0, variant === 'tablet' ? 2 : 3).map((interest, index) => (
                 <Badge 
                   key={index} 
                   variant="secondary" 
                   className={cn(
-                    "bg-gradient-to-r from-pink-100 to-purple-100 text-purple-700 border-purple-200 px-3 py-1",
+                    "bg-gradient-to-r from-pink-100 to-purple-100 text-purple-700 border-purple-200 px-2 py-1",
                     variant === 'tablet' ? "text-xs" : "text-sm"
                   )}
                 >
                   {interest}
                 </Badge>
               ))}
-              {profile.interests.length > (variant === 'tablet' ? 3 : 4) && (
+              {profile.interests.length > (variant === 'tablet' ? 2 : 3) && (
                 <Badge 
                   variant="secondary" 
                   className={cn(
-                    "bg-gradient-to-r from-pink-100 to-purple-100 text-purple-700 border-purple-200 px-3 py-1",
+                    "bg-gradient-to-r from-pink-100 to-purple-100 text-purple-700 border-purple-200 px-2 py-1",
                     variant === 'tablet' ? "text-xs" : "text-sm"
                   )}
                 >
-                  +{profile.interests.length - (variant === 'tablet' ? 3 : 4)}
+                  +{profile.interests.length - (variant === 'tablet' ? 2 : 3)}
                 </Badge>
               )}
             </div>

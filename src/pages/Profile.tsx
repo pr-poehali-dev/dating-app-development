@@ -13,6 +13,8 @@ import ProfileBio from '@/components/profile/ProfileBio';
 import ProfileInterests from '@/components/profile/ProfileInterests';
 import ProfilePhotos from '@/components/profile/ProfilePhotos';
 import ProfileAdditionalInfo from '@/components/profile/ProfileAdditionalInfo';
+import ProfileDetails from '@/components/profile/ProfileDetails';
+import ProfileEditForm from '@/components/profile/ProfileEditForm';
 import EmptyState from '@/components/profile/EmptyState';
 import LoadingState from '@/components/profile/LoadingState';
 
@@ -34,6 +36,7 @@ const Profile = () => {
   const { user, updateProfile } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  const [isDetailedEditing, setIsDetailedEditing] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(user);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -133,6 +136,14 @@ const Profile = () => {
     }
   };
 
+  const handleDetailedSave = (updatedData: Partial<User>) => {
+    if (user && updateProfile) {
+      updateProfile(updatedData);
+      setCurrentUser(prev => prev ? { ...prev, ...updatedData } : null);
+    }
+    setIsDetailedEditing(false);
+  };
+
   const handleAuth = () => {
     navigate('/auth');
   };
@@ -165,6 +176,14 @@ const Profile = () => {
               <p className="text-gray-600 text-lg">Управляйте своим профилем знакомств</p>
             </div>
             <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setIsDetailedEditing(true)}
+                className="border-purple-200 hover:bg-purple-50"
+              >
+                <Icon name="Edit" size={20} className="mr-2" />
+                Подробно
+              </Button>
               <Button
                 variant="outline"
                 onClick={() => navigate('/settings')}
@@ -254,6 +273,9 @@ const Profile = () => {
                 onPhotosChange={handlePhotosChange}
               />
 
+              {/* Подробная информация */}
+              <ProfileDetails user={currentUser} variant="desktop" />
+              
               {/* Дополнительная информация */}
               <ProfileAdditionalInfo user={currentUser} />
 
@@ -287,6 +309,14 @@ const Profile = () => {
               Профиль
             </h1>
             <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsDetailedEditing(true)}
+                className="text-purple-600 hover:bg-purple-50"
+              >
+                <Icon name="Edit" size={20} />
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"
@@ -380,6 +410,9 @@ const Profile = () => {
               onPhotosChange={handlePhotosChange}
             />
 
+            {/* Подробная информация */}
+            <ProfileDetails user={currentUser} variant="mobile" />
+
             {/* Дополнительная информация */}
             <ProfileAdditionalInfo user={currentUser} />
 
@@ -401,6 +434,20 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      {/* Модальное окно детального редактирования */}
+      {isDetailedEditing && currentUser && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <ProfileEditForm
+              user={currentUser}
+              onSave={handleDetailedSave}
+              onCancel={() => setIsDetailedEditing(false)}
+              variant={window.innerWidth >= 1024 ? 'desktop' : 'mobile'}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

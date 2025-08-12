@@ -19,15 +19,40 @@ export interface User {
   subscription?: 'free' | 'premium';
   lastActive: Date | string;
   role?: 'user' | 'admin';
-  // Дополнительная информация из регистрации
-  zodiac?: string;
-  smoking?: 'never' | 'sometimes' | 'often';
-  drinking?: 'never' | 'socially' | 'often';
-  education?: string;
-  work?: string;
-  children?: 'none' | 'have' | 'want';
-  pets?: 'none' | 'have' | 'love';
+  
+  // Основная информация
   height?: number;
+  weight?: number;
+  bodyType?: 'slim' | 'athletic' | 'average' | 'curvy' | 'large';
+  hairColor?: 'blonde' | 'brunette' | 'red' | 'black' | 'gray' | 'other';
+  eyeColor?: 'brown' | 'blue' | 'green' | 'hazel' | 'gray' | 'other';
+  
+  // Образ жизни
+  zodiac?: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+  smoking?: 'never' | 'sometimes' | 'often' | 'socially';
+  drinking?: 'never' | 'socially' | 'often' | 'rarely';
+  diet?: 'omnivore' | 'vegetarian' | 'vegan' | 'kosher' | 'halal' | 'other';
+  religion?: 'christian' | 'muslim' | 'jewish' | 'buddhist' | 'hindu' | 'atheist' | 'agnostic' | 'other';
+  
+  // Карьера и образование
+  education?: 'school' | 'college' | 'bachelor' | 'master' | 'phd';
+  work?: string;
+  income?: 'prefer_not_say' | 'low' | 'average' | 'above_average' | 'high';
+  
+  // Отношения и семья
+  relationship?: 'single' | 'divorced' | 'widowed';
+  children?: 'none' | 'have' | 'want' | 'dont_want';
+  wantChildren?: 'yes' | 'no' | 'maybe';
+  pets?: 'none' | 'have_dogs' | 'have_cats' | 'have_other' | 'love_all';
+  
+  // Персональность
+  personality?: string[];
+  languages?: string[];
+  travelStyle?: 'homebody' | 'explorer' | 'adventurer' | 'luxury' | 'budget';
+  
+  // Поиск отношений
+  lookingFor?: 'casual' | 'serious' | 'friendship' | 'marriage' | 'activity_partner';
+  
   settings?: {
     discoverable: boolean;
     ageRange: [number, number];
