@@ -124,7 +124,7 @@ const ProfileCard = ({
           <div className="absolute inset-0">
             {profile.photos && profile.photos.length > 0 ? (
               <img 
-                src={profile.photos[0]} 
+                src={profile.photos.find(p => p.isMain)?.url || profile.photos[0]?.url} 
                 alt={profile.name}
                 className="w-full h-full object-cover"
               />

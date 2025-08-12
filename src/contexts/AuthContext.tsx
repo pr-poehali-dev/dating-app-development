@@ -15,6 +15,13 @@ export interface Friendship {
   createdAt: Date | string;
 }
 
+export interface UserPhoto {
+  id: string;
+  url: string;
+  isMain: boolean;
+  uploadedAt: Date | string;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -22,7 +29,7 @@ export interface User {
   password?: string;
   age: number;
   bio: string;
-  photos: string[];
+  photos: UserPhoto[];
   location: {
     lat: number;
     lng: number;
@@ -89,6 +96,9 @@ interface AuthContextType {
   register: (userData: RegisterData) => Promise<boolean>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => void;
+  uploadPhoto: (file: File) => Promise<string>;
+  setMainPhoto: (photoId: string) => void;
+  deletePhoto: (photoId: string) => void;
   isLoading: boolean;
 }
 
@@ -347,6 +357,53 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const uploadPhoto = async (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const photoId = Date.now().toString();
+        const dataUrl = reader.result as string;
+        
+        if (user) {
+          const newPhoto: UserPhoto = {
+            id: photoId,
+            url: dataUrl,
+            isMain: user.photos.length === 0,
+            uploadedAt: new Date()
+          };
+          
+          const updatedPhotos = [...user.photos, newPhoto];
+          updateProfile({ photos: updatedPhotos });
+        }
+        
+        resolve(photoId);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const setMainPhoto = (photoId: string) => {
+    if (user) {
+      const updatedPhotos = user.photos.map(photo => ({
+        ...photo,
+        isMain: photo.id === photoId
+      }));
+      updateProfile({ photos: updatedPhotos });
+    }
+  };
+
+  const deletePhoto = (photoId: string) => {
+    if (user) {
+      const updatedPhotos = user.photos.filter(photo => photo.id !== photoId);
+      
+      if (updatedPhotos.length > 0 && !updatedPhotos.some(photo => photo.isMain)) {
+        updatedPhotos[0].isMain = true;
+      }
+      
+      updateProfile({ photos: updatedPhotos });
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -354,6 +411,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       register,
       logout,
       updateProfile,
+      uploadPhoto,
+      setMainPhoto,
+      deletePhoto,
       isLoading
     }}>
       {children}

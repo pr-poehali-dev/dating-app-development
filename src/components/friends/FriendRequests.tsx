@@ -82,7 +82,7 @@ const FriendRequests = ({ variant = 'mobile' }: FriendRequestsProps) => {
                   <div className="relative">
                     {requestUser.photos && requestUser.photos.length > 0 ? (
                       <img
-                        src={requestUser.photos[0]}
+                        src={requestUser.photos.find(p => p.isMain)?.url || requestUser.photos[0]?.url}
                         alt={requestUser.name}
                         className={`${variant === 'desktop' ? 'w-16 h-16' : 'w-12 h-12'} rounded-full object-cover shadow-md`}
                       />

@@ -45,7 +45,7 @@ const ProfileHeader = ({
       )}>
         {user.photos && user.photos.length > 0 ? (
           <img 
-            src={user.photos[0]} 
+            src={user.photos.find(p => p.isMain)?.url || user.photos[0]?.url} 
             alt={user.name}
             className="w-full h-full object-cover rounded-full"
           />
