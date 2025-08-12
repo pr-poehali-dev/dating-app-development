@@ -21,12 +21,12 @@ const Discover = () => {
   }, [user]);
 
   const generateProfiles = () => {
-    // Пустой массив - теперь только реальные пользователи
-    const realProfiles: User[] = [];
+    // Загружаем реальных пользователей из localStorage
+    const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
     
-    // Фильтруем уже просмотренные анкеты
-    const filteredProfiles = realProfiles.filter(profile => 
-      !viewedProfiles.includes(profile.id)
+    // Фильтруем: убираем текущего пользователя и уже просмотренные анкеты
+    const filteredProfiles = allUsers.filter((profile: User) => 
+      profile.id !== user?.id && !viewedProfiles.includes(profile.id)
     );
     
     setProfiles(filteredProfiles);
@@ -42,10 +42,14 @@ const Discover = () => {
     localStorage.setItem(`viewedProfiles_${user.id}`, JSON.stringify(updated));
   };
 
-  const handleSwipe = (direction: 'left' | 'right' | 'up') => {
-    if (!currentProfile) return;
+  const handleSwipe = async (direction: 'left' | 'right' | 'up') => {
+    if (!currentProfile || !user) return;
 
     markAsViewed(currentProfile.id);
+
+    // Добавляем просмотр профиля
+    const { addProfileView } = await import('@/utils/statsUtils');
+    addProfileView(user.id, currentProfile.id);
 
     if (direction === 'right') {
       handleLike();
@@ -64,30 +68,47 @@ const Discover = () => {
     }, 300);
   };
 
-  const handleLike = () => {
-    if (!currentProfile) return;
+  const handleLike = async () => {
+    if (!currentProfile || !user) return;
     
-    const isMatch = Math.random() > 0.7;
-    if (isMatch) {
-      const newMatches = [...matches, currentProfile.id];
-      setMatches(newMatches);
-      localStorage.setItem('matches', JSON.stringify(newMatches));
-    }
+    // Добавляем лайк через систему статистики
+    const { addLike } = await import('@/utils/statsUtils');
+    addLike(user.id, currentProfile.id, 'like');
+    
+    // Обновляем локальные матчи для UI
+    const existingMatches = JSON.parse(localStorage.getItem('matches') || '[]');
+    const userMatches = existingMatches.filter((match: any) =>
+      match.user1Id === user.id || match.user2Id === user.id
+    );
+    setMatches(userMatches.map((match: any) => 
+      match.user1Id === user.id ? match.user2Id : match.user1Id
+    ));
   };
 
-  const handlePass = () => {
-    console.log('Passed on', currentProfile?.name);
+  const handlePass = async () => {
+    if (!currentProfile || !user) return;
+    
+    // Записываем "pass" для статистики, но не увеличиваем лайки
+    const { addLike } = await import('@/utils/statsUtils');
+    addLike(user.id, currentProfile.id, 'pass');
   };
 
-  const handleSuperLike = () => {
-    if (superLikes > 0 && currentProfile) {
+  const handleSuperLike = async () => {
+    if (superLikes > 0 && currentProfile && user) {
       setSuperLikes(prev => prev - 1);
-      const isMatch = Math.random() > 0.5;
-      if (isMatch) {
-        const newMatches = [...matches, currentProfile.id];
-        setMatches(newMatches);
-        localStorage.setItem('matches', JSON.stringify(newMatches));
-      }
+      
+      // Добавляем супер-лайк через систему статистики
+      const { addLike } = await import('@/utils/statsUtils');
+      addLike(user.id, currentProfile.id, 'superlike');
+      
+      // Обновляем локальные матчи для UI
+      const existingMatches = JSON.parse(localStorage.getItem('matches') || '[]');
+      const userMatches = existingMatches.filter((match: any) =>
+        match.user1Id === user.id || match.user2Id === user.id
+      );
+      setMatches(userMatches.map((match: any) => 
+        match.user1Id === user.id ? match.user2Id : match.user1Id
+      ));
     }
   };
 

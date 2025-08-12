@@ -72,7 +72,7 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!newMessage.trim() || !chatId || !user) return;
 
     const message: Message = {
@@ -88,6 +88,13 @@ const Chat = () => {
     setMessages(updatedMessages);
     saveChat(chatId, updatedMessages);
     setNewMessage('');
+
+    // Обновляем счетчик сообщений для получателя
+    const recipientId = chatId.split('_').find(id => id !== user.id);
+    if (recipientId) {
+      const { updateMessageCount } = await import('@/utils/statsUtils');
+      updateMessageCount(recipientId);
+    }
 
     simulateResponse(chatId, updatedMessages);
   };

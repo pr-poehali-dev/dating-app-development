@@ -29,6 +29,11 @@ const ProfileStats = ({ stats, variant = 'mobile' }: ProfileStatsProps) => {
     color: string; 
     bgColor: string; 
   }) => {
+    // Не показываем статистику с нулевыми значениями
+    if (value === 0) {
+      return null;
+    }
+
     if (isDesktop) {
       return (
         <div className={`flex items-center justify-between p-4 ${bgColor} rounded-xl`}>
@@ -49,6 +54,32 @@ const ProfileStats = ({ stats, variant = 'mobile' }: ProfileStatsProps) => {
       </div>
     );
   };
+
+  // Подсчитываем количество непустых статистик
+  const nonZeroStats = [
+    { key: 'likes', value: stats.likes },
+    { key: 'matches', value: stats.matches },
+    { key: 'views', value: stats.views },
+    { key: 'messages', value: stats.messages }
+  ].filter(stat => stat.value > 0);
+
+  // Если нет статистики для показа, возвращаем null
+  if (nonZeroStats.length === 0) {
+    return (
+      <Card className={`bg-white/${isDesktop ? '80' : '95'} backdrop-blur-sm border-0 ${isDesktop ? 'shadow-xl' : 'shadow-lg'}`}>
+        <CardContent className="p-6">
+          <h3 className={`${isDesktop ? 'text-xl' : 'text-base'} font-${isDesktop ? 'bold' : 'semibold'} mb-3 flex items-center gap-2`}>
+            <Icon name="TrendingUp" size={isDesktop ? 20 : 18} className="text-green-500" />
+            Статистика
+          </h3>
+          <div className="text-center py-4 text-gray-500">
+            <Icon name="BarChart3" size={32} className="mx-auto mb-2 text-gray-300" />
+            <p className="text-sm">Статистика появится после активности</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (isDesktop) {
     return (
@@ -100,7 +131,7 @@ const ProfileStats = ({ stats, variant = 'mobile' }: ProfileStatsProps) => {
           <Icon name="TrendingUp" size={18} className="text-green-500" />
           Статистика
         </h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className={`grid gap-4 ${nonZeroStats.length === 1 ? 'grid-cols-1' : nonZeroStats.length === 2 ? 'grid-cols-2' : nonZeroStats.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}>
           <StatCard 
             icon="Heart"
             value={stats.likes}

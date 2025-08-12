@@ -84,15 +84,24 @@ const Profile = () => {
         });
       }
       
-      // Загружаем статистику
-      const matches = JSON.parse(localStorage.getItem('matches') || '[]');
-      const profileViews = localStorage.getItem('profileViews') || '0';
-      setStats({
-        likes: Math.floor(Math.random() * 150) + 50,
-        matches: matches.length + 12,
-        views: parseInt(profileViews) + Math.floor(Math.random() * 200) + 80,
-        messages: Math.floor(Math.random() * 40) + 15
-      });
+      // Загружаем реальную статистику
+      if (user) {
+        const { getUserStats, updateMessageCount } = await import('@/utils/statsUtils');
+        
+        // Обновляем счетчик сообщений
+        updateMessageCount(user.id);
+        
+        // Получаем актуальную статистику
+        const userStats = getUserStats(user.id);
+        setStats(userStats);
+      } else {
+        setStats({
+          likes: 0,
+          matches: 0,
+          views: 0,
+          messages: 0
+        });
+      }
       
       setTimeout(() => setIsLoading(false), 800);
     };
