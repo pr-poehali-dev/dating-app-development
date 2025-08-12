@@ -18,28 +18,31 @@ const DiscoverDesktop = ({
   onSwipe
 }: DiscoverDesktopProps) => {
   return (
-    <div className="container mx-auto px-6 py-8">
+    <div className="w-full h-full flex flex-col">
       {/* Заголовок */}
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+      <div className="text-center py-6 px-6">
+        <h1 className="text-3xl xl:text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
           Откройте для себя новых людей
         </h1>
-        <p className="text-gray-600 text-lg">
+        <p className="text-gray-600 text-base xl:text-lg">
           Найдите свою половинку среди тысяч интересных профилей
         </p>
       </div>
 
-      <div className="flex justify-center items-center gap-8">
+      {/* Основной контент */}
+      <div className="flex-1 flex justify-center items-center gap-4 lg:gap-6 xl:gap-8 px-6 pb-6">
         {/* Статистика */}
-        <StatsBar 
-          superLikes={superLikes}
-          matches={matches.length}
-          variant="desktop"
-          layout="sidebar"
-        />
+        <div className="flex-shrink-0">
+          <StatsBar 
+            superLikes={superLikes}
+            matches={matches.length}
+            variant="desktop"
+            layout="sidebar"
+          />
+        </div>
 
         {/* Основная карточка */}
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <AnimatePresence mode="wait">
             <ProfileCard
               key={currentProfile.id}
@@ -52,14 +55,16 @@ const DiscoverDesktop = ({
         </div>
 
         {/* Кнопки действий */}
-        <SwipeActions
-          onSwipeLeft={() => onSwipe('left')}
-          onSwipeUp={() => onSwipe('up')}
-          onSwipeRight={() => onSwipe('right')}
-          superLikes={superLikes}
-          variant="desktop"
-          orientation="vertical"
-        />
+        <div className="flex-shrink-0">
+          <SwipeActions
+            onSwipeLeft={() => onSwipe('left')}
+            onSwipeUp={() => onSwipe('up')}
+            onSwipeRight={() => onSwipe('right')}
+            superLikes={superLikes}
+            variant="desktop"
+            orientation="vertical"
+          />
+        </div>
       </div>
     </div>
   );

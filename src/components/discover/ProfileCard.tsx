@@ -33,9 +33,9 @@ const ProfileCard = ({
   };
 
   const cardSizes = {
-    desktop: 'w-96 h-[600px]',
-    tablet: 'h-[500px]',
-    mobile: 'h-[550px]'
+    desktop: 'w-80 xl:w-96 h-[480px] xl:h-[600px]',
+    tablet: 'w-full h-full max-h-[500px]',
+    mobile: 'w-full h-full max-h-[520px]'
   };
 
   const avatarSizes = {
@@ -84,8 +84,9 @@ const ProfileCard = ({
         ...(isMobile ? { type: "spring", damping: 25, stiffness: 300 } : {})
       }}
       className={cn(
-        "absolute inset-0 cursor-grab active:cursor-grabbing",
-        isMobile && "touch-none"
+        "absolute inset-0",
+        variant === 'desktop' ? "cursor-grab active:cursor-grabbing" : "touch-none",
+        "w-full h-full"
       )}
       style={isMobile ? {
         border: swipeDirection ? `3px solid ${getSwipeColor()}` : 'none',
@@ -93,7 +94,7 @@ const ProfileCard = ({
       } : undefined}
     >
       <Card className={cn(
-        "w-full overflow-hidden border-0 shadow-2xl",
+        "w-full h-full overflow-hidden border-0 shadow-2xl",
         cardSizes[variant],
         variant === 'desktop' 
           ? "bg-white/90 backdrop-blur-sm hover:shadow-3xl transition-all duration-300"

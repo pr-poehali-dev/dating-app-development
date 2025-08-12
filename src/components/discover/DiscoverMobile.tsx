@@ -62,16 +62,22 @@ const DiscoverMobile = ({
   };
 
   const containerClass = variant === 'tablet' 
-    ? "container mx-auto px-4 py-6" 
-    : "max-w-sm mx-auto px-4 py-4 pt-safe";
+    ? "w-full h-full flex flex-col px-4" 
+    : "w-full h-full flex flex-col px-4";
 
   const headerContent = variant === 'tablet' ? (
-    <div className="text-center mb-6">
-      <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+    <div className="text-center py-4">
+      <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
         Новые знакомства
       </h1>
     </div>
-  ) : null;
+  ) : (
+    <div className="text-center py-3">
+      <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+        Новые знакомства
+      </h1>
+    </div>
+  );
 
   const statsLayout = variant === 'tablet' ? 'horizontal' : 'horizontal';
   
@@ -80,16 +86,20 @@ const DiscoverMobile = ({
       {headerContent}
       
       {variant === 'tablet' ? (
-        <div className="flex justify-center">
-          <div className="max-w-md w-full">
+        <>
+          {/* Статистика */}
+          <div className="flex-shrink-0 mb-4">
             <StatsBar 
               superLikes={superLikes}
               matches={matches.length}
               variant={variant}
               layout={statsLayout}
             />
+          </div>
 
-            <div className="relative h-[500px] mb-6">
+          {/* Основной контент */}
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div className="relative max-w-md w-full h-full max-h-[calc(100vh-200px)]">
               <AnimatePresence mode="wait">
                 <ProfileCard
                   key={currentProfile.id}
@@ -100,7 +110,10 @@ const DiscoverMobile = ({
                 />
               </AnimatePresence>
             </div>
+          </div>
 
+          {/* Кнопки действий */}
+          <div className="flex-shrink-0 py-4">
             <SwipeActions
               onSwipeLeft={() => onSwipe('left')}
               onSwipeUp={() => onSwipe('up')}
@@ -109,38 +122,47 @@ const DiscoverMobile = ({
               variant="tablet"
             />
           </div>
-        </div>
+        </>
       ) : (
         <>
-          <StatsBar 
-            superLikes={superLikes}
-            matches={matches.length}
-            variant="mobile"
-            layout="horizontal"
-          />
-
-          <div className="relative h-[550px] mb-6">
-            <AnimatePresence mode="wait">
-              <ProfileCard
-                key={currentProfile.id}
-                profile={currentProfile}
-                dragOffset={dragOffset}
-                swipeDirection={swipeDirection}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                variant="mobile"
-              />
-            </AnimatePresence>
+          {/* Статистика */}
+          <div className="flex-shrink-0">
+            <StatsBar 
+              superLikes={superLikes}
+              matches={matches.length}
+              variant="mobile"
+              layout="horizontal"
+            />
           </div>
 
-          <SwipeActions
-            onSwipeLeft={() => onSwipe('left')}
-            onSwipeUp={() => onSwipe('up')}
-            onSwipeRight={() => onSwipe('right')}
-            superLikes={superLikes}
-            variant="mobile"
-          />
+          {/* Основной контент */}
+          <div className="flex-1 flex items-center justify-center py-2">
+            <div className="relative w-full max-w-sm h-full max-h-[calc(100vh-180px)]">
+              <AnimatePresence mode="wait">
+                <ProfileCard
+                  key={currentProfile.id}
+                  profile={currentProfile}
+                  dragOffset={dragOffset}
+                  swipeDirection={swipeDirection}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                  variant="mobile"
+                />
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Кнопки действий */}
+          <div className="flex-shrink-0 pb-20">
+            <SwipeActions
+              onSwipeLeft={() => onSwipe('left')}
+              onSwipeUp={() => onSwipe('up')}
+              onSwipeRight={() => onSwipe('right')}
+              superLikes={superLikes}
+              variant="mobile"
+            />
+          </div>
         </>
       )}
     </div>

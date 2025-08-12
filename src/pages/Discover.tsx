@@ -117,9 +117,9 @@ const Discover = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100">
+    <div className="h-screen overflow-hidden bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100">
       {/* Десктоп версия */}
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex h-full">
         <DiscoverDesktop
           currentProfile={currentProfile}
           superLikes={superLikes}
@@ -129,7 +129,7 @@ const Discover = () => {
       </div>
 
       {/* Планшет версия */}
-      <div className="hidden md:block lg:hidden">
+      <div className="hidden md:flex lg:hidden h-full">
         <DiscoverMobile
           currentProfile={currentProfile}
           superLikes={superLikes}
@@ -140,7 +140,7 @@ const Discover = () => {
       </div>
 
       {/* Мобильная версия */}
-      <div className="md:hidden">
+      <div className="md:hidden h-full">
         <DiscoverMobile
           currentProfile={currentProfile}
           superLikes={superLikes}
