@@ -94,39 +94,150 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Создаем админа если его еще нет
+    // Создаем демо-пользователей с полной информацией
     const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const adminExists = users.find((u: User) => u.email === 'swi79@bk.ru');
     
-    if (!adminExists) {
-      const adminUser: User = {
-        id: 'admin-001',
-        name: 'Администратор',
-        email: 'swi79@bk.ru',
-        password: '908908Tolya--Qwe',
-        age: 35,
-        bio: 'Администратор системы NoumiDating',
-        photos: [],
-        location: {
-          lat: 55.7558,
-          lng: 37.6176,
-          city: 'Москва'
+    if (users.length === 0) {
+      const demoUsers: User[] = [
+        {
+          id: 'admin-001',
+          name: 'Администратор',
+          email: 'swi79@bk.ru',
+          password: '908908Tolya--Qwe',
+          age: 35,
+          bio: 'Администратор системы NoumiDating',
+          photos: [],
+          location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
+          interests: ['Администрирование', 'Техподдержка'],
+          verified: true,
+          subscription: 'premium',
+          lastActive: new Date(),
+          role: 'admin',
+          settings: { discoverable: false, ageRange: [18, 65], maxDistance: 100, showOnlineStatus: false }
         },
-        interests: ['Администрирование', 'Техподдержка'],
-        verified: true,
-        subscription: 'premium',
-        lastActive: new Date(),
-        role: 'admin',
-        settings: {
-          discoverable: false,
-          ageRange: [18, 65],
-          maxDistance: 100,
-          showOnlineStatus: false
+        {
+          id: 'user-001',
+          name: 'Анна',
+          email: 'anna@example.com',
+          password: 'password123',
+          age: 28,
+          bio: 'Люблю путешествия, читать книги и проводить время с друзьями. Ищу серьёзные отношения.',
+          photos: [],
+          location: { lat: 59.9311, lng: 30.3609, city: 'СПб' },
+          interests: ['Путешествия', 'Книги', 'Йога', 'Кафе'],
+          verified: true,
+          subscription: 'free',
+          lastActive: new Date(),
+          height: 165,
+          bodyType: 'slim',
+          hairColor: 'blonde',
+          eyeColor: 'blue',
+          zodiac: 'leo',
+          smoking: 'never',
+          drinking: 'socially',
+          education: 'bachelor',
+          work: 'Маркетолог',
+          relationship: 'single',
+          children: 'none',
+          wantChildren: 'yes',
+          pets: 'have_cats',
+          lookingFor: 'serious',
+          languages: ['Русский', 'Английский'],
+          settings: { discoverable: true, ageRange: [25, 35], maxDistance: 25, showOnlineStatus: true }
+        },
+        {
+          id: 'user-002',
+          name: 'Максим',
+          email: 'max@example.com',
+          password: 'password123',
+          age: 32,
+          bio: 'Программист и любитель спорта. Хочу найти партнёра для совместных приключений.',
+          photos: [],
+          location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
+          interests: ['Программирование', 'Спорт', 'Кино', 'Технологии'],
+          verified: false,
+          subscription: 'premium',
+          lastActive: new Date(),
+          height: 182,
+          bodyType: 'athletic',
+          hairColor: 'brunette',
+          eyeColor: 'brown',
+          zodiac: 'scorpio',
+          smoking: 'never',
+          drinking: 'rarely',
+          education: 'master',
+          work: 'Senior Developer',
+          relationship: 'single',
+          children: 'none',
+          wantChildren: 'maybe',
+          pets: 'none',
+          lookingFor: 'serious',
+          languages: ['Русский', 'Английский'],
+          settings: { discoverable: true, ageRange: [25, 40], maxDistance: 30, showOnlineStatus: true }
+        },
+        {
+          id: 'user-003',
+          name: 'Мария',
+          email: 'maria@example.com',
+          password: 'password123',
+          age: 26,
+          bio: 'Художница и любительница природы. Люблю создавать красоту вокруг себя.',
+          photos: [],
+          location: { lat: 56.8431, lng: 60.6454, city: 'Екатеринбург' },
+          interests: ['Искусство', 'Природа', 'Фотография', 'Танцы'],
+          verified: true,
+          subscription: 'free',
+          lastActive: new Date(),
+          height: 168,
+          bodyType: 'average',
+          hairColor: 'red',
+          eyeColor: 'green',
+          zodiac: 'pisces',
+          smoking: 'never',
+          drinking: 'socially',
+          education: 'bachelor',
+          work: 'Художница',
+          relationship: 'single',
+          children: 'none',
+          wantChildren: 'yes',
+          pets: 'love_all',
+          lookingFor: 'serious',
+          languages: ['Русский'],
+          settings: { discoverable: true, ageRange: [23, 33], maxDistance: 20, showOnlineStatus: true }
+        },
+        {
+          id: 'user-004',
+          name: 'Александр',
+          email: 'alex@example.com',
+          password: 'password123',
+          age: 29,
+          bio: 'Врач-стоматолог, люблю путешествия и активный отдых. Мечтаю о семье.',
+          photos: [],
+          location: { lat: 55.0084, lng: 82.9357, city: 'Новосибирск' },
+          interests: ['Медицина', 'Путешествия', 'Спорт', 'Музыка'],
+          verified: true,
+          subscription: 'premium',
+          lastActive: new Date(),
+          height: 178,
+          bodyType: 'athletic',
+          hairColor: 'black',
+          eyeColor: 'brown',
+          zodiac: 'aquarius',
+          smoking: 'never',
+          drinking: 'socially',
+          education: 'master',
+          work: 'Врач-стоматолог',
+          relationship: 'single',
+          children: 'none',
+          wantChildren: 'yes',
+          pets: 'have_dogs',
+          lookingFor: 'marriage',
+          languages: ['Русский', 'Английский', 'Немецкий'],
+          settings: { discoverable: true, ageRange: [23, 35], maxDistance: 50, showOnlineStatus: true }
         }
-      };
+      ];
       
-      users.push(adminUser);
-      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('users', JSON.stringify(demoUsers));
     }
 
     // Проверяем сохранённого пользователя
