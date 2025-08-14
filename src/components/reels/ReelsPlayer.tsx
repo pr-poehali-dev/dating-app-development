@@ -114,13 +114,13 @@ const ReelsPlayer = ({ className }: ReelsPlayerProps) => {
   return (
     <div 
       ref={containerRef}
-      className={cn("relative h-screen bg-black overflow-hidden", className)}
+      className={cn("relative h-screen bg-black overflow-hidden flex items-center justify-center", className)}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {/* Video Stack */}
-      <div className="relative w-full h-full">
+      <div className="relative w-full max-w-sm h-full mx-auto" style={{ aspectRatio: '9/16' }}>
         {reels.slice(Math.max(0, currentIndex - 1), currentIndex + 3).map((reel, index) => {
           const actualIndex = Math.max(0, currentIndex - 1) + index;
           const isActive = actualIndex === currentIndex;
@@ -130,7 +130,7 @@ const ReelsPlayer = ({ className }: ReelsPlayerProps) => {
             <div
               key={reel.id}
               className={cn(
-                "absolute inset-0 transition-transform duration-300",
+                "absolute inset-0 transition-transform duration-300 rounded-2xl overflow-hidden",
                 offset === 0 && "z-10",
                 offset > 0 && `translate-y-full z-${Math.max(1, 10 - offset)}`,
                 offset < 0 && `-translate-y-full z-${Math.max(1, 10 + offset)}`
@@ -142,35 +142,34 @@ const ReelsPlayer = ({ className }: ReelsPlayerProps) => {
                 isPlaying={isPlaying && isActive}
                 onTogglePlay={togglePlay}
                 onVideoRef={setVideoRef(actualIndex)}
-                className="w-full h-full"
+                className="w-full h-full rounded-2xl"
               />
             </div>
           );
         })}
 
-        {/* UI Overlay */}
-        <div className="absolute inset-0 z-20 pointer-events-none">
-          <div className="relative w-full h-full flex">
-            {/* Left Side - User Info */}
-            <div className="flex-1 flex flex-col justify-end p-4 pointer-events-auto">
-              <ReelsInfo reel={currentReel} />
-            </div>
+      {/* UI Overlay */}
+      <div className="absolute inset-0 z-20 pointer-events-none max-w-sm mx-auto">
+        <div className="relative w-full h-full flex">
+          {/* Left Side - User Info */}
+          <div className="flex-1 flex flex-col justify-end p-4 pointer-events-auto">
+            <ReelsInfo reel={currentReel} />
+          </div>
 
-            {/* Right Side - Actions */}
-            <div className="flex flex-col justify-end p-4 pointer-events-auto">
-              <ReelsActions
-                reel={currentReel}
-                onAction={handleAction}
-                onOpenComments={() => setShowComments(true)}
-              />
-            </div>
+          {/* Right Side - Actions */}
+          <div className="flex flex-col justify-end p-4 pointer-events-auto">
+            <ReelsActions
+              reel={currentReel}
+              onAction={handleAction}
+              onOpenComments={() => setShowComments(true)}
+            />
           </div>
         </div>
+      </div>
 
-        {/* Navigation Hints */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 text-white/50 text-sm">
-          ↑↓ для переключения • Space для паузы
-        </div>
+      {/* Navigation Hints */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 text-white/50 text-sm">
+        ↑↓ для переключения • Space для паузы
       </div>
 
       {/* Comments Modal */}
