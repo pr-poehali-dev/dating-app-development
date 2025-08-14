@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Story, StoryProgress } from '@/types/story';
+import { Story, StoryProgress as StoryProgressType } from '@/types/story';
 import { useStories } from '@/contexts/StoriesContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDevice } from '@/hooks/useDevice';
-import StoryProgress from './StoryProgress';
+import StoryProgressBar from './StoryProgress';
 import StoryAuthorInfo from './StoryAuthorInfo';
 import StoryContent from './StoryContent';
 import StoryControls from './StoryControls';
@@ -27,7 +27,7 @@ const StoryViewer = ({
 }: StoryViewerProps) => {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(initialStoryIndex);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(initialMediaIndex);
-  const [progress, setProgress] = useState<StoryProgress>({
+  const [progress, setProgress] = useState<StoryProgressType>({
     currentIndex: initialMediaIndex,
     isPlaying: true,
     progress: 0
@@ -262,7 +262,7 @@ const StoryViewer = ({
       onMouseMove={showControlsTemporarily}
       onClick={showControlsTemporarily}
     >
-      <StoryProgress 
+      <StoryProgressBar 
         story={currentStory}
         currentMediaIndex={currentMediaIndex}
         progress={progress}

@@ -7,7 +7,7 @@ interface StoryProgressProps {
   isTouch: boolean;
 }
 
-const StoryProgress = ({ story, currentMediaIndex, progress, isTouch }: StoryProgressProps) => {
+const StoryProgressBar = ({ story, currentMediaIndex, progress, isTouch }: StoryProgressProps) => {
   return (
     <div className="absolute top-4 left-4 right-4 z-10">
       <div className={`flex gap-1 ${isTouch ? 'px-2' : ''}`}>
@@ -30,4 +30,4 @@ const StoryProgress = ({ story, currentMediaIndex, progress, isTouch }: StoryPro
   );
 };
 
-export default StoryProgress;
+export default StoryProgressBar;
