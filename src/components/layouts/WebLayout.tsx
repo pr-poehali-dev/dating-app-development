@@ -42,6 +42,14 @@ export default function WebLayout({ children }: WebLayoutProps) {
               </Button>
               <Button 
                 variant="ghost"
+                onClick={() => navigate('/stories')}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                <Icon name="Camera" size={18} className="mr-2" />
+                Истории
+              </Button>
+              <Button 
+                variant="ghost"
                 onClick={() => navigate('/matches')}
                 className="text-gray-600 hover:text-gray-900"
               >

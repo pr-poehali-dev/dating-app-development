@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { FriendsProvider } from "@/contexts/FriendsContext";
+import { StoriesProvider } from "@/contexts/StoriesContext";
 import Home from "./pages/Home";
 import HomeWeb from "./pages/web/HomeWeb";
 import LandingPage from "./pages/LandingPage";
@@ -22,6 +23,7 @@ import UserProfile from "./pages/UserProfile";
 import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
 import Admin from "./pages/Admin";
+import Stories from "./pages/Stories";
 
 import NotFound from "./pages/NotFound";
 import WebLayout from "./components/layouts/WebLayout";
@@ -66,6 +68,7 @@ const AppContent = () => {
       <Route path="/chat/:id?" element={<Layout><ProtectedRoute><ChatComponent /></ProtectedRoute></Layout>} />
       <Route path="/profile" element={<Layout><ProtectedRoute><ProfileComponent /></ProtectedRoute></Layout>} />
       <Route path="/user/:id" element={<Layout><ProtectedRoute><UserProfile /></ProtectedRoute></Layout>} />
+      <Route path="/stories" element={<Layout><ProtectedRoute><Stories /></ProtectedRoute></Layout>} />
       <Route path="/notifications" element={<Layout><ProtectedRoute><Notifications /></ProtectedRoute></Layout>} />
       <Route path="/settings" element={<Layout><ProtectedRoute><Settings /></ProtectedRoute></Layout>} />
       <Route path="/admin" element={<Layout><ProtectedRoute><Admin /></ProtectedRoute></Layout>} />
@@ -82,7 +85,9 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <FriendsProvider>
-            <AppContent />
+            <StoriesProvider>
+              <AppContent />
+            </StoriesProvider>
           </FriendsProvider>
         </AuthProvider>
       </BrowserRouter>

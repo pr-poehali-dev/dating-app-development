@@ -17,6 +17,7 @@ import ProfileDetails from '@/components/profile/ProfileDetails';
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
 import EmptyState from '@/components/profile/EmptyState';
 import LoadingState from '@/components/profile/LoadingState';
+import UserStories from '@/components/stories/UserStories';
 
 interface FormData {
   name: string;
@@ -269,6 +270,9 @@ const Profile = () => {
                 onToggleInterest={toggleInterest}
                 variant="desktop"
               />
+
+              {/* Истории */}
+              <UserStories variant="desktop" />
             </div>
 
             {/* Правая колонка - Статистика и дополнительная информация */}
@@ -409,6 +413,9 @@ const Profile = () => {
               onToggleInterest={toggleInterest}
               variant="mobile"
             />
+
+            {/* Stories */}
+            <UserStories variant="mobile" />
 
             {/* Stats */}
             <ProfileStats stats={stats} variant="mobile" />

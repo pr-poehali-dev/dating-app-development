@@ -3,6 +3,8 @@ import { useAuth, User } from '@/contexts/AuthContext';
 import DiscoverDesktop from '@/components/discover/DiscoverDesktop';
 import DiscoverMobile from '@/components/discover/DiscoverMobile';
 import EmptyState from '@/components/discover/EmptyState';
+import StoriesFeed from '@/components/stories/StoriesFeed';
+import { useDevice } from '@/hooks/useDevice';
 
 const Discover = () => {
   const { user } = useAuth();

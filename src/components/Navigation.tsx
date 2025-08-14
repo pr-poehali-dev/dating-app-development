@@ -12,6 +12,7 @@ const Navigation = () => {
 
   const navItems = [
     { path: '/discover', icon: 'Flame', label: 'Поиск' },
+    { path: '/stories', icon: 'Camera', label: 'Истории' },
     { path: '/matches', icon: 'Users', label: 'Совпадения' },
     { path: '/notifications', icon: 'Bell', label: 'Уведомления', badge: notificationsCount },
     { path: '/chat', icon: 'MessageCircle', label: 'Чат' },
