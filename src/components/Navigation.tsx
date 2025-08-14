@@ -14,7 +14,7 @@ const Navigation = () => {
     { path: '/discover', icon: 'Flame', label: 'Поиск' },
     { path: '/stories', icon: 'Camera', label: 'Истории' },
     { path: '/matches', icon: 'Users', label: 'Совпадения' },
-    { path: '/notifications', icon: 'Bell', label: 'Уведомления', badge: notificationsCount },
+    { path: '/notifications', icon: 'Bell', label: 'Уведомления', hasNotification: notificationsCount > 0 },
     { path: '/chat', icon: 'MessageCircle', label: 'Чат' },
     { path: '/profile', icon: 'User', label: 'Профиль' },
   ];
@@ -38,7 +38,7 @@ const Navigation = () => {
             >
               <div className="relative">
                 <Icon name={item.icon as any} size={24} />
-                {item.badge && item.badge > 0 && (
+                {item.hasNotification && (
                   <div className="absolute -top-1 -right-1 bg-red-500 rounded-full w-3 h-3 animate-pulse border border-white"></div>
                 )}
               </div>
