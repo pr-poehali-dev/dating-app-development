@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Story, StoryView, CreateStoryData, StoryMedia } from '@/types/story';
+import { Story, StoryView, CreateStoryData, StoryMedia, StoryReaction, StoryLike } from '@/types/story';
 import { useAuth } from './AuthContext';
 
 interface StoriesContextType {
@@ -8,6 +8,9 @@ interface StoriesContextType {
   createStory: (data: CreateStoryData) => Promise<void>;
   deleteStory: (storyId: string) => void;
   viewStory: (storyId: string, mediaIndex: number) => void;
+  addReaction: (storyId: string, emoji: string) => void;
+  removeReaction: (storyId: string, reactionId: string) => void;
+  toggleLike: (storyId: string, type: 'like' | 'dislike') => void;
   getActiveStories: () => Story[];
   getUserActiveStories: (userId: string) => Story[];
   hasUnviewedStories: (userId: string) => boolean;
@@ -41,6 +44,8 @@ export const StoriesProvider = ({ children }: StoriesProviderProps) => {
         ...story,
         createdAt: new Date(story.createdAt),
         expiresAt: new Date(story.expiresAt),
+        reactions: story.reactions || [],
+        likes: story.likes || [],
         media: story.media.map((media: any) => ({
           ...media,
           uploadedAt: new Date(media.uploadedAt)
@@ -173,6 +178,8 @@ export const StoriesProvider = ({ children }: StoriesProviderProps) => {
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 часа
         viewedBy: [],
+        reactions: [],
+        likes: [],
         isActive: true
       };
 
@@ -237,6 +244,88 @@ export const StoriesProvider = ({ children }: StoriesProviderProps) => {
     return getActiveStories().filter(story => story.userId === userId);
   };
 
+  const addReaction = (storyId: string, emoji: string) => {
+    if (!user) return;
+    
+    setStories(prevStories =>
+      prevStories.map(story => {
+        if (story.id === storyId) {
+          const newReaction: StoryReaction = {
+            id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+            userId: user.id,
+            emoji,
+            createdAt: new Date()
+          };
+          return {
+            ...story,
+            reactions: [...story.reactions, newReaction]
+          };
+        }
+        return story;
+      })
+    );
+  };
+
+  const removeReaction = (storyId: string, reactionId: string) => {
+    if (!user) return;
+    
+    setStories(prevStories =>
+      prevStories.map(story => {
+        if (story.id === storyId) {
+          return {
+            ...story,
+            reactions: story.reactions.filter(reaction => 
+              !(reaction.id === reactionId && reaction.userId === user.id)
+            )
+          };
+        }
+        return story;
+      })
+    );
+  };
+
+  const toggleLike = (storyId: string, type: 'like' | 'dislike') => {
+    if (!user) return;
+    
+    setStories(prevStories =>
+      prevStories.map(story => {
+        if (story.id === storyId) {
+          const existingLike = story.likes.find(like => like.userId === user.id);
+          
+          if (existingLike) {
+            if (existingLike.type === type) {
+              // Убираем лайк/дизлайк если нажали на тот же
+              return {
+                ...story,
+                likes: story.likes.filter(like => like.userId !== user.id)
+              };
+            } else {
+              // Меняем тип лайка
+              return {
+                ...story,
+                likes: story.likes.map(like => 
+                  like.userId === user.id ? { ...like, type, createdAt: new Date() } : like
+                )
+              };
+            }
+          } else {
+            // Добавляем новый лайк
+            const newLike: StoryLike = {
+              userId: user.id,
+              type,
+              createdAt: new Date()
+            };
+            return {
+              ...story,
+              likes: [...story.likes, newLike]
+            };
+          }
+        }
+        return story;
+      })
+    );
+  };
+
   const hasUnviewedStories = (userId: string) => {
     if (!user) return false;
     const userStories = getUserActiveStories(userId);
@@ -251,6 +340,9 @@ export const StoriesProvider = ({ children }: StoriesProviderProps) => {
     createStory,
     deleteStory,
     viewStory,
+    addReaction,
+    removeReaction,
+    toggleLike,
     getActiveStories,
     getUserActiveStories,
     hasUnviewedStories,

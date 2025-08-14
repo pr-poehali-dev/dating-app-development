@@ -7,6 +7,19 @@ export interface StoryMedia {
   uploadedAt: Date;
 }
 
+export interface StoryReaction {
+  id: string;
+  userId: string;
+  emoji: string;
+  createdAt: Date;
+}
+
+export interface StoryLike {
+  userId: string;
+  type: 'like' | 'dislike';
+  createdAt: Date;
+}
+
 export interface Story {
   id: string;
   userId: string;
@@ -14,6 +27,8 @@ export interface Story {
   createdAt: Date;
   expiresAt: Date;
   viewedBy: string[]; // массив ID пользователей, которые просмотрели
+  reactions: StoryReaction[]; // эмоджи реакции
+  likes: StoryLike[]; // лайки и дизлайки
   isActive: boolean;
 }
 

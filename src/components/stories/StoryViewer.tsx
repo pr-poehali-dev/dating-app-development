@@ -5,6 +5,7 @@ import Icon from '@/components/ui/icon';
 import { Story, StoryProgress } from '@/types/story';
 import { useStories } from '@/contexts/StoriesContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useDevice } from '@/hooks/useDevice';
 
 interface StoryViewerProps {
   stories: Story[];
@@ -28,13 +29,16 @@ const StoryViewer = ({
   });
   const [showControls, setShowControls] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [showReactions, setShowReactions] = useState(false);
+  const [reactionPosition, setReactionPosition] = useState({ x: 0, y: 0 });
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout>();
   const pauseTimeoutRef = useRef<NodeJS.Timeout>();
   
-  const { viewStory } = useStories();
+  const { viewStory, addReaction, toggleLike } = useStories();
   const { user } = useAuth();
+  const { isTouch } = useDevice();
 
   const currentStory = stories[currentStoryIndex];
   const currentMedia = currentStory?.media[currentMediaIndex];
@@ -128,7 +132,9 @@ const StoryViewer = ({
       clearTimeout(pauseTimeoutRef.current);
     }
     pauseTimeoutRef.current = setTimeout(() => {
-      setShowControls(false);
+      if (!isTouch) {
+        setShowControls(false);
+      }
     }, 3000);
   };
 
@@ -194,6 +200,16 @@ const StoryViewer = ({
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [previousMedia, nextMedia, onClose]);
 
+  // Автоскрытие реакций
+  useEffect(() => {
+    if (showReactions) {
+      const timeout = setTimeout(() => {
+        setShowReactions(false);
+      }, 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [showReactions]);
+
   if (!currentStory || !currentMedia) {
     return null;
   }
@@ -213,7 +229,7 @@ const StoryViewer = ({
     >
       {/* Прогресс-бары */}
       <div className="absolute top-4 left-4 right-4 z-10">
-        <div className="flex gap-1">
+        <div className={`flex gap-1 ${isTouch ? 'px-2' : ''}`}>
           {currentStory.media.map((_, index) => (
             <div key={index} className="flex-1 h-1 bg-white/30 rounded-full overflow-hidden">
               <div
@@ -267,7 +283,9 @@ const StoryViewer = ({
       </AnimatePresence>
 
       {/* Контент истории */}
-      <div className="relative w-full h-full max-w-md mx-auto">
+      <div className={`relative w-full h-full ${
+        isTouch ? 'max-w-none' : 'max-w-md mx-auto'
+      }`}>
         {currentMedia.type === 'photo' ? (
           <img
             src={currentMedia.url}
@@ -295,7 +313,15 @@ const StoryViewer = ({
           />
           <div 
             className="flex-1 cursor-pointer"
-            onClick={nextMedia}
+            onClick={isTouch ? togglePause : nextMedia}
+            onDoubleClick={isTouch ? (e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setReactionPosition({
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+              });
+              setShowReactions(true);
+            } : undefined}
           />
         </div>
 
@@ -322,20 +348,24 @@ const StoryViewer = ({
 
       {/* Контролы */}
       <AnimatePresence>
-        {showControls && (
+        {(showControls || isTouch) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute top-4 right-4 z-10 flex gap-2"
+            className={`absolute z-10 flex gap-2 ${
+              isTouch ? 'top-16 right-4' : 'top-4 right-4'
+            }`}
           >
-            <Button
-              size="sm"
-              onClick={togglePause}
-              className="rounded-full bg-black/50 hover:bg-black/70 text-white border-0"
-            >
-              <Icon name={isPaused ? "Play" : "Pause"} size={16} />
-            </Button>
+            {!isTouch && (
+              <Button
+                size="sm"
+                onClick={togglePause}
+                className="rounded-full bg-black/50 hover:bg-black/70 text-white border-0"
+              >
+                <Icon name={isPaused ? "Play" : "Pause"} size={16} />
+              </Button>
+            )}
             <Button
               size="sm"
               onClick={onClose}
@@ -347,8 +377,60 @@ const StoryViewer = ({
         )}
       </AnimatePresence>
 
-      {/* Навигация между историями */}
-      {stories.length > 1 && (
+      {/* Мобильные интеракции */}
+      {isTouch && (
+        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10">
+          <div className="flex items-center gap-4 bg-black/50 backdrop-blur-sm rounded-full px-6 py-3">
+            {/* Лайки */}
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                onClick={() => toggleLike(currentStory.id, 'like')}
+                className={`rounded-full border-0 w-10 h-10 p-0 ${
+                  currentStory.likes.find(like => like.userId === user?.id && like.type === 'like')
+                    ? 'bg-green-500 text-white'
+                    : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+              >
+                <Icon name="ThumbsUp" size={16} />
+              </Button>
+              <span className="text-white text-sm font-medium">
+                {currentStory.likes.filter(like => like.type === 'like').length}
+              </span>
+            </div>
+
+            {/* Дизлайки */}
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                onClick={() => toggleLike(currentStory.id, 'dislike')}
+                className={`rounded-full border-0 w-10 h-10 p-0 ${
+                  currentStory.likes.find(like => like.userId === user?.id && like.type === 'dislike')
+                    ? 'bg-red-500 text-white'
+                    : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+              >
+                <Icon name="ThumbsDown" size={16} />
+              </Button>
+              <span className="text-white text-sm font-medium">
+                {currentStory.likes.filter(like => like.type === 'dislike').length}
+              </span>
+            </div>
+
+            {/* Реакции */}
+            <Button
+              size="sm"
+              onClick={() => setShowReactions(true)}
+              className="rounded-full bg-white/20 hover:bg-white/30 text-white border-0 w-10 h-10 p-0"
+            >
+              <span className="text-lg">😍</span>
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Навигация между историями (десктоп) */}
+      {!isTouch && stories.length > 1 && (
         <AnimatePresence>
           {showControls && (
             <motion.div
@@ -389,6 +471,64 @@ const StoryViewer = ({
           )}
         </AnimatePresence>
       )}
+
+      {/* Панель эмоджи реакций */}
+      <AnimatePresence>
+        {showReactions && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            className="absolute z-20"
+            style={{
+              left: isTouch ? '50%' : reactionPosition.x,
+              top: isTouch ? '50%' : reactionPosition.y,
+              transform: isTouch ? 'translate(-50%, -50%)' : 'translate(-50%, -100%)'
+            }}
+          >
+            <div className="bg-black/80 backdrop-blur-sm rounded-full p-3 flex gap-2">
+              {['😍', '😂', '😢', '😎', '🔥', '❤️', '😮', '😡'].map((emoji) => (
+                <button
+                  key={emoji}
+                  className="text-2xl hover:scale-125 transition-transform active:scale-110"
+                  onClick={() => {
+                    addReaction(currentStory.id, emoji);
+                    setShowReactions(false);
+                  }}
+                >
+                  {emoji}
+                </button>
+              ))}
+              <Button
+                size="sm"
+                onClick={() => setShowReactions(false)}
+                className="rounded-full bg-white/20 hover:bg-white/30 text-white border-0 w-8 h-8 p-0 ml-2"
+              >
+                <Icon name="X" size={12} />
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Отображение реакций */}
+      <div className="absolute top-32 right-4 z-10">
+        <AnimatePresence>
+          {currentStory.reactions.slice(-3).map((reaction, index) => (
+            <motion.div
+              key={reaction.id}
+              initial={{ scale: 0, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0, opacity: 0, y: -20 }}
+              transition={{ delay: index * 0.1 }}
+              className="mb-2 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2"
+            >
+              <span className="text-lg">{reaction.emoji}</span>
+              <span className="text-white text-xs">1</span>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </motion.div>
   );
 };
