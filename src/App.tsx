@@ -19,6 +19,7 @@ import Chat from "./pages/Chat";
 import ChatWeb from "./pages/web/ChatWeb";
 import Profile from "./pages/Profile";
 import ProfileWeb from "./pages/web/ProfileWeb";
+import People from "./pages/People";
 import UserProfile from "./pages/UserProfile";
 import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
@@ -64,6 +65,7 @@ const AppContent = () => {
       <Route path="/" element={user ? <Navigate to="/discover" /> : <LandingPage />} />
       <Route path="/auth" element={user ? <Navigate to="/discover" /> : <Auth />} />
       <Route path="/discover" element={<Layout><ProtectedRoute><DiscoverComponent /></ProtectedRoute></Layout>} />
+      <Route path="/people" element={<Layout><ProtectedRoute><People /></ProtectedRoute></Layout>} />
       <Route path="/matches" element={<Layout><ProtectedRoute><MatchesComponent /></ProtectedRoute></Layout>} />
       <Route path="/chat/:id?" element={<Layout><ProtectedRoute><ChatComponent /></ProtectedRoute></Layout>} />
       <Route path="/profile" element={<Layout><ProtectedRoute><ProfileComponent /></ProtectedRoute></Layout>} />

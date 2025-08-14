@@ -17,6 +17,7 @@ const Navigation = () => {
 
   const navItems = [
     { path: '/discover', icon: 'Flame', label: 'Поиск' },
+    { path: '/people', icon: 'Users2', label: 'Люди' },
     { path: '/stories', icon: 'PlusCircle', label: 'Stories' },
     { path: '/matches', icon: 'Users', label: 'Совпадения' },
     { path: '/notifications', icon: 'Bell', label: 'Уведомления', hasNotification: notificationsCount > 0 },
