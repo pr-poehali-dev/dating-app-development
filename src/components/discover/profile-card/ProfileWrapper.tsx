@@ -110,13 +110,6 @@ const ProfileWrapper = ({
           avatarSizes={avatarSizes}
           onSwipe={onSwipe}
         />
-
-        <ProfileInfo
-          profile={profile}
-          variant={variant}
-          textSizes={textSizes}
-          showSwipeHints={showSwipeHints}
-        />
       </Card>
     </motion.div>
   );

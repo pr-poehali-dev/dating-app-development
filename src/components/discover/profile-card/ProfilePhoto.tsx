@@ -23,7 +23,7 @@ const ProfilePhoto = ({
   return (
     <div className={cn(
       "relative bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-600",
-      variant === 'desktop' ? "h-3/4" : variant === 'tablet' ? "h-3/4" : "h-2/3",
+      "h-full",
       variant === 'mobile' && "overflow-hidden"
     )}>
       {variant === 'desktop' && (

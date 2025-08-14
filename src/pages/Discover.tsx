@@ -26,9 +26,9 @@ const Discover = () => {
     // Загружаем реальных пользователей из localStorage
     const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
     
-    // Фильтруем: убираем текущего пользователя и уже просмотренные анкеты
+    // Показываем всех пользователей кроме текущего (убираем фильтр по просмотренным)
     const filteredProfiles = allUsers.filter((profile: User) => 
-      profile.id !== user?.id && !viewedProfiles.includes(profile.id)
+      profile.id !== user?.id
     );
     
     setProfiles(filteredProfiles);
@@ -63,7 +63,7 @@ const Discover = () => {
 
     setTimeout(() => {
       if (currentIndex + 1 >= profiles.length) {
-        generateProfiles();
+        setCurrentIndex(0); // Зацикливаем показ профилей
       } else {
         setCurrentIndex(prev => prev + 1);
       }
