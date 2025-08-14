@@ -2,7 +2,7 @@ import { AnimatePresence } from 'framer-motion';
 import { User } from '@/contexts/AuthContext';
 import ProfileCard from './ProfileCard';
 import SwipeActions from './SwipeActions';
-import StatsBar from './StatsBar';
+
 
 interface DiscoverDesktopProps {
   currentProfile: User;
@@ -31,15 +31,7 @@ const DiscoverDesktop = ({
 
       {/* Основной контент */}
       <div className="flex-1 flex justify-center items-center gap-4 lg:gap-6 xl:gap-8 px-6 pb-6 min-h-0">
-        {/* Статистика */}
-        <div className="flex-shrink-0">
-          <StatsBar 
-            superLikes={superLikes}
-            matches={matches.length}
-            variant="desktop"
-            layout="sidebar"
-          />
-        </div>
+
 
         {/* Основная карточка */}
         <div className="relative flex-shrink-0">

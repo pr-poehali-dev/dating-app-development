@@ -3,7 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { User } from '@/contexts/AuthContext';
 import ProfileCard from './ProfileCard';
 import SwipeActions from './SwipeActions';
-import StatsBar from './StatsBar';
+
 
 interface DiscoverMobileProps {
   currentProfile: User;
@@ -79,7 +79,7 @@ const DiscoverMobile = ({
     </div>
   );
 
-  const statsLayout = variant === 'tablet' ? 'horizontal' : 'horizontal';
+
   
   return (
     <div className={containerClass}>
@@ -87,15 +87,7 @@ const DiscoverMobile = ({
       
       {variant === 'tablet' ? (
         <>
-          {/* Статистика */}
-          <div className="flex-shrink-0 mb-4">
-            <StatsBar 
-              superLikes={superLikes}
-              matches={matches.length}
-              variant={variant}
-              layout={statsLayout}
-            />
-          </div>
+
 
           {/* Основной контент */}
           <div className="flex-1 flex flex-col items-center justify-center min-h-0">
@@ -125,15 +117,7 @@ const DiscoverMobile = ({
         </>
       ) : (
         <>
-          {/* Статистика */}
-          <div className="flex-shrink-0">
-            <StatsBar 
-              superLikes={superLikes}
-              matches={matches.length}
-              variant="mobile"
-              layout="horizontal"
-            />
-          </div>
+
 
           {/* Основной контент */}
           <div className="flex-1 flex items-center justify-center min-h-0">
