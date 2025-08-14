@@ -44,7 +44,17 @@ const Navigation = () => {
                 }`}
               >
                 <div className="relative">
-                  <Icon name={item.icon as any} size={24} />
+                  {item.path === '/profile' ? (
+                    <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-current">
+                      <img 
+                        src="https://cdn.poehali.dev/files/a8633799-0bfc-4c85-925c-dfbfeff38e24.png" 
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <Icon name={item.icon as any} size={24} />
+                  )}
                   {item.hasNotification && (
                     <div className="absolute -top-1 -right-1 bg-red-500 rounded-full w-3 h-3 animate-pulse border border-white"></div>
                   )}
@@ -86,7 +96,19 @@ const Navigation = () => {
                   }`}
                 >
                   <div className="relative">
-                    <Icon name={item.icon as any} size={20} />
+                    {item.path === '/profile' ? (
+                      <div className={`w-6 h-6 rounded-full overflow-hidden border-2 ${
+                        isActive ? 'border-white' : 'border-current'
+                      }`}>
+                        <img 
+                          src="https://cdn.poehali.dev/files/a8633799-0bfc-4c85-925c-dfbfeff38e24.png" 
+                          alt="Profile"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <Icon name={item.icon as any} size={20} />
+                    )}
                     {item.hasNotification && (
                       <div className="absolute -top-1 -right-1 bg-red-500 rounded-full w-2 h-2 animate-pulse"></div>
                     )}
@@ -100,22 +122,29 @@ const Navigation = () => {
           </div>
 
           {/* Профиль пользователя */}
-          <div className="flex items-center space-x-3">
+          <Link to="/profile" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <StoryAvatar
               hasStory={hasActiveStories}
               viewed={false}
-              onClick={() => navigate('/stories')}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/profile');
+              }}
               size="md"
             >
-              <div className="w-full h-full bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                <Icon name="User" size={20} className="text-white" />
+              <div className="w-full h-full rounded-full overflow-hidden shadow-lg">
+                <img 
+                  src="https://cdn.poehali.dev/files/a8633799-0bfc-4c85-925c-dfbfeff38e24.png" 
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </StoryAvatar>
             <div className="text-sm">
-              <div className="font-semibold text-gray-900">{user?.name}</div>
-              <div className="text-gray-500">Онлайн</div>
+              <div className="font-semibold text-gray-900">{user?.name || 'Ольга'}</div>
+              <div className="text-gray-500">Екатеринбург</div>
             </div>
-          </div>
+          </Link>
         </div>
       </nav>
     </>
