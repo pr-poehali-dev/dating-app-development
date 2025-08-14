@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { User } from '@/contexts/AuthContext';
 import ProfileCard from './ProfileCard';
-import SwipeActions from './SwipeActions';
+
 
 
 interface DiscoverMobileProps {
@@ -98,22 +98,14 @@ const DiscoverMobile = ({
                   profile={currentProfile}
                   dragOffset={{ x: 0, y: 0 }}
                   swipeDirection={null}
+                  onSwipe={onSwipe}
                   variant="tablet"
                 />
               </AnimatePresence>
             </div>
           </div>
 
-          {/* Кнопки действий */}
-          <div className="flex-shrink-0 py-4">
-            <SwipeActions
-              onSwipeLeft={() => onSwipe('left')}
-              onSwipeUp={() => onSwipe('up')}
-              onSwipeRight={() => onSwipe('right')}
-              superLikes={superLikes}
-              variant="tablet"
-            />
-          </div>
+
         </>
       ) : (
         <>
@@ -131,22 +123,14 @@ const DiscoverMobile = ({
                   onTouchStart={handleTouchStart}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
+                  onSwipe={onSwipe}
                   variant="mobile"
                 />
               </AnimatePresence>
             </div>
           </div>
 
-          {/* Кнопки действий */}
-          <div className="flex-shrink-0 pb-16 pt-2">
-            <SwipeActions
-              onSwipeLeft={() => onSwipe('left')}
-              onSwipeUp={() => onSwipe('up')}
-              onSwipeRight={() => onSwipe('right')}
-              superLikes={superLikes}
-              variant="mobile"
-            />
-          </div>
+
         </>
       )}
     </div>

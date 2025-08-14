@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'framer-motion';
 import { User } from '@/contexts/AuthContext';
 import ProfileCard from './ProfileCard';
-import SwipeActions from './SwipeActions';
+
 
 
 interface DiscoverDesktopProps {
@@ -41,22 +41,13 @@ const DiscoverDesktop = ({
               profile={currentProfile}
               dragOffset={{ x: 0, y: 0 }}
               swipeDirection={null}
+              onSwipe={onSwipe}
               variant="desktop"
             />
           </AnimatePresence>
         </div>
 
-        {/* Кнопки действий */}
-        <div className="flex-shrink-0">
-          <SwipeActions
-            onSwipeLeft={() => onSwipe('left')}
-            onSwipeUp={() => onSwipe('up')}
-            onSwipeRight={() => onSwipe('right')}
-            superLikes={superLikes}
-            variant="desktop"
-            orientation="vertical"
-          />
-        </div>
+
       </div>
     </div>
   );

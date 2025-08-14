@@ -14,6 +14,7 @@ interface ProfileCardProps {
   onTouchStart?: (e: React.TouchEvent) => void;
   onTouchMove?: (e: React.TouchEvent) => void;
   onTouchEnd?: () => void;
+  onSwipe?: (direction: 'left' | 'right' | 'up') => void;
   variant?: 'desktop' | 'tablet' | 'mobile';
 }
 
@@ -24,6 +25,7 @@ const ProfileCard = ({
   onTouchStart,
   onTouchMove,
   onTouchEnd,
+  onSwipe,
   variant = 'mobile'
 }: ProfileCardProps) => {
   const navigate = useNavigate();
@@ -218,6 +220,39 @@ const ProfileCard = ({
               )}
             </>
           )}
+          
+          {/* Кнопки действий встроенные в фото */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-3">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onSwipe && onSwipe('left');
+              }}
+              className="w-12 h-12 bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-gray-700/80 transition-colors"
+            >
+              <Icon name="X" size={20} className="text-white" />
+            </button>
+            
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onSwipe && onSwipe('up');
+              }}
+              className="w-10 h-10 bg-blue-500/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600/90 transition-colors"
+            >
+              <Icon name="Star" size={16} className="text-white" />
+            </button>
+            
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onSwipe && onSwipe('right');
+              }}
+              className="w-12 h-12 bg-green-500/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-green-600/90 transition-colors"
+            >
+              <Icon name="Heart" size={20} className="text-white" />
+            </button>
+          </div>
         </div>
 
         {/* Информация о профиле */}
