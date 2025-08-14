@@ -148,28 +148,29 @@ const ReelsPlayer = ({ className }: ReelsPlayerProps) => {
           );
         })}
 
-      {/* UI Overlay */}
-      <div className="absolute inset-0 z-20 pointer-events-none max-w-sm mx-auto">
-        <div className="relative w-full h-full flex">
-          {/* Left Side - User Info */}
-          <div className="flex-1 flex flex-col justify-end p-4 pointer-events-auto">
-            <ReelsInfo reel={currentReel} />
-          </div>
+        {/* UI Overlay */}
+        <div className="absolute inset-0 z-20 pointer-events-none">
+          <div className="relative w-full h-full flex">
+            {/* Left Side - User Info */}
+            <div className="flex-1 flex flex-col justify-end p-4 pointer-events-auto">
+              <ReelsInfo reel={currentReel} />
+            </div>
 
-          {/* Right Side - Actions */}
-          <div className="flex flex-col justify-end p-4 pointer-events-auto">
-            <ReelsActions
-              reel={currentReel}
-              onAction={handleAction}
-              onOpenComments={() => setShowComments(true)}
-            />
+            {/* Right Side - Actions */}
+            <div className="flex flex-col justify-end p-4 pointer-events-auto">
+              <ReelsActions
+                reel={currentReel}
+                onAction={handleAction}
+                onOpenComments={() => setShowComments(true)}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Navigation Hints */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 text-white/50 text-sm">
-        ↑↓ для переключения • Space для паузы
+        {/* Navigation Hints */}
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 text-white/50 text-sm">
+          ↑↓ для переключения • Space для паузы
+        </div>
       </div>
 
       {/* Comments Modal */}
