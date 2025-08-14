@@ -6,14 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { Badge } from '@/components/ui/badge';
+import { getDemoUserById, DemoUser } from '@/data/demoUsers';
 
 const UserProfile = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user: currentUser } = useAuth();
   const { sendFriendRequest, removeFriend, getFriendshipStatus } = useFriends();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | DemoUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDemoUser, setIsDemoUser] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -21,12 +23,22 @@ const UserProfile = () => {
       return;
     }
 
-    // Загружаем данные пользователя
+    // Сначала проверяем, это демо-пользователь?
+    const demoUser = getDemoUserById(id);
+    if (demoUser) {
+      setUser(demoUser);
+      setIsDemoUser(true);
+      setIsLoading(false);
+      return;
+    }
+
+    // Загружаем данные реального пользователя
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     const foundUser = users.find((u: User) => u.id === id);
     
     if (foundUser) {
       setUser(foundUser);
+      setIsDemoUser(false);
     } else {
       navigate('/discover');
     }
@@ -158,9 +170,12 @@ const UserProfile = () => {
                 <CardContent className="p-8">
                   <div className="flex items-start gap-6">
                     <div className="relative">
-                      {user.photos && user.photos.length > 0 ? (
+                      {((isDemoUser && user.photos) || (!isDemoUser && user.photos && user.photos.length > 0)) ? (
                         <img
-                          src={user.photos.find(p => p.isMain)?.url || user.photos[0]?.url}
+                          src={isDemoUser 
+                            ? (user as DemoUser).photos[0]
+                            : (user.photos.find(p => p.isMain)?.url || user.photos[0]?.url)
+                          }
                           alt={user.name}
                           className="w-32 h-32 rounded-full object-cover shadow-lg"
                         />
@@ -186,7 +201,7 @@ const UserProfile = () => {
                         )}
                       </div>
                       <p className="text-xl text-gray-600 mb-4">
-                        {user.age} лет • {user.location.city}
+                        {user.age} лет • {isDemoUser ? user.location : user.location.city}
                       </p>
                       <p className="text-gray-700 text-lg leading-relaxed">{user.bio}</p>
                     </div>
@@ -241,10 +256,10 @@ const UserProfile = () => {
                       </div>
                     )}
                     
-                    {user.work && (
+                    {(user.work || (isDemoUser && user.occupation)) && (
                       <div className="flex items-center gap-3">
                         <Icon name="Briefcase" size={18} className="text-gray-500" />
-                        <span>{user.work}</span>
+                        <span>{isDemoUser ? (user as DemoUser).occupation : user.work}</span>
                       </div>
                     )}
                     
@@ -252,11 +267,15 @@ const UserProfile = () => {
                       <div className="flex items-center gap-3">
                         <Icon name="GraduationCap" size={18} className="text-gray-500" />
                         <span>
-                          {user.education === 'school' && 'Среднее образование'}
-                          {user.education === 'college' && 'Среднее специальное'}
-                          {user.education === 'bachelor' && 'Высшее (бакалавр)'}
-                          {user.education === 'master' && 'Высшее (магистр)'}
-                          {user.education === 'phd' && 'Ученая степень'}
+                          {isDemoUser ? user.education : (
+                            <>
+                              {user.education === 'school' && 'Среднее образование'}
+                              {user.education === 'college' && 'Среднее специальное'}
+                              {user.education === 'bachelor' && 'Высшее (бакалавр)'}
+                              {user.education === 'master' && 'Высшее (магистр)'}
+                              {user.education === 'phd' && 'Ученая степень'}
+                            </>
+                          )}
                         </span>
                       </div>
                     )}

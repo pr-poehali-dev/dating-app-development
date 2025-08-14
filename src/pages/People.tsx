@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { demoUsers, DemoUser } from '@/data/demoUsers';
 
 interface User {
   id: string;
@@ -18,79 +19,12 @@ interface User {
 }
 
 const People = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<DemoUser[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
 
-  const demoUsers: User[] = [
-    {
-      id: '1',
-      name: 'Ольга',
-      age: 36,
-      location: 'Екатеринбург',
-      photo: 'https://cdn.poehali.dev/files/a8633799-0bfc-4c85-925c-dfbfeff38e24.png',
-      bio: 'Люблю природу, путешествия и новые знакомства. Ищу серьёзные отношения.',
-      interests: ['Путешествия', 'Спорт', 'Кулинария'],
-      isOnline: true,
-      verified: true
-    },
-    {
-      id: '2',
-      name: 'Анна',
-      age: 28,
-      location: 'Москва',
-      photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face',
-      bio: 'Творческая личность, люблю искусство и театр. Ищу единомышленника для совместного развития.',
-      interests: ['Искусство', 'Театр', 'Музыка'],
-      isOnline: false,
-      lastSeen: '2 часа назад',
-      verified: true
-    },
-    {
-      id: '3',
-      name: 'Мария',
-      age: 32,
-      location: 'Санкт-Петербург',
-      photo: 'https://images.unsplash.com/photo-1494790108755-2616b9d9e8da?w=400&h=400&fit=crop&crop=face',
-      bio: 'Активная жизненная позиция, занимаюсь спортом и веду здоровый образ жизни.',
-      interests: ['Спорт', 'Здоровье', 'Йога'],
-      isOnline: true
-    },
-    {
-      id: '4',
-      name: 'Елена',
-      age: 29,
-      location: 'Новосибирск',
-      photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
-      bio: 'Путешественница со стажем, изучаю культуры мира. Ищу спутника для новых приключений.',
-      interests: ['Путешествия', 'Культура', 'Языки'],
-      isOnline: false,
-      lastSeen: '5 минут назад',
-      verified: true
-    },
-    {
-      id: '5',
-      name: 'Дарья',
-      age: 26,
-      location: 'Казань',
-      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face',
-      bio: 'IT-специалист, увлекаюсь технологиями и инновациями. В свободное время читаю книги.',
-      interests: ['Технологии', 'Книги', 'Наука'],
-      isOnline: true
-    },
-    {
-      id: '6',
-      name: 'Виктория',
-      age: 31,
-      location: 'Краснодар',
-      photo: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop&crop=face',
-      bio: 'Люблю готовить и экспериментировать с кухнями мира. Мечтаю найти человека для семьи.',
-      interests: ['Кулинария', 'Семья', 'Дом'],
-      isOnline: false,
-      lastSeen: '1 день назад'
-    }
-  ];
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -205,7 +139,7 @@ const People = () => {
                     {/* Фото */}
                     <div className="relative">
                       <img
-                        src={user.photo}
+                        src={user.photos ? user.photos[0] : user.photo}
                         alt={user.name}
                         className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
