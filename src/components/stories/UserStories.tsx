@@ -41,7 +41,7 @@ const UserStories = ({ variant = 'mobile' }: UserStoriesProps) => {
         <CardContent className={variant === 'desktop' ? 'p-6' : 'p-4'}>
           <div className="flex items-center justify-between mb-4">
             <h3 className={`font-bold text-gray-800 ${variant === 'desktop' ? 'text-lg' : 'text-base'}`}>
-              Мои истории
+              Мои Stories
             </h3>
             <Button
               size={variant === 'desktop' ? 'default' : 'sm'}
@@ -57,7 +57,7 @@ const UserStories = ({ variant = 'mobile' }: UserStoriesProps) => {
             <div className="text-center py-8">
               <Icon name="Camera" size={variant === 'desktop' ? 48 : 40} className="text-gray-400 mx-auto mb-4" />
               <h4 className={`font-bold text-gray-700 mb-2 ${variant === 'desktop' ? 'text-lg' : 'text-base'}`}>
-                Нет историй
+                Нет Stories
               </h4>
               <p className="text-gray-500 text-sm mb-4">
                 Поделитесь моментами с друзьями
@@ -68,7 +68,7 @@ const UserStories = ({ variant = 'mobile' }: UserStoriesProps) => {
                 size={variant === 'desktop' ? 'default' : 'sm'}
               >
                 <Icon name="Plus" size={16} className="mr-2" />
-                Создать первую историю
+                Создать первую Story
               </Button>
             </div>
           ) : (

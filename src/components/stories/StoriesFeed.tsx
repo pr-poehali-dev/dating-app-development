@@ -79,7 +79,7 @@ const StoriesFeed = ({ variant = 'mobile' }: StoriesFeedProps) => {
         <CardHeader className={variant === 'desktop' ? 'pb-4' : 'pb-3'}>
           <CardTitle className={`flex items-center gap-3 ${variant === 'desktop' ? 'text-2xl' : 'text-lg'}`}>
             <Icon name="Camera" size={variant === 'desktop' ? 24 : 20} className="text-purple-500" />
-            Истории друзей
+            Stories друзей
             <Badge variant="secondary" className="bg-purple-100 text-purple-700">
               {allUserStories.length}
             </Badge>
@@ -192,7 +192,7 @@ const StoriesFeed = ({ variant = 'mobile' }: StoriesFeedProps) => {
         </CardContent>
       </Card>
 
-      {/* Просмотрщик историй */}
+      {/* Просмотрщик Stories */}
       <AnimatePresence>
         {showViewer && viewerStories.length > 0 && (
           <StoryViewer

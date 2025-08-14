@@ -20,7 +20,7 @@ const Stories = () => {
         <div className="text-center">
           <Icon name="Camera" size={64} className="text-gray-400 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-gray-700 mb-2">Войдите в аккаунт</h2>
-          <p className="text-gray-500">Чтобы просматривать истории, необходимо войти в аккаунт</p>
+          <p className="text-gray-500">Чтобы просматривать Stories, необходимо войти в аккаунт</p>
         </div>
       </div>
     );
@@ -39,7 +39,7 @@ const Stories = () => {
             <h1 className={`font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent ${
               isTouch ? 'text-2xl' : 'text-4xl'
             }`}>
-              Истории
+              Stories
             </h1>
             {!isTouch && (
               <p className="text-gray-600 text-lg">Делитесь моментами с друзьями</p>
@@ -83,7 +83,7 @@ const Stories = () => {
             size={isTouch ? 'sm' : 'default'}
           >
             <Icon name="User" size={16} className="mr-2" />
-            Мои истории
+            Мои Stories
           </Button>
         </div>
 
