@@ -62,8 +62,8 @@ const DiscoverMobile = ({
   };
 
   const containerClass = variant === 'tablet' 
-    ? "w-full h-full flex flex-col px-4" 
-    : "w-full h-full flex flex-col px-4";
+    ? "w-full h-screen flex flex-col px-4" 
+    : "w-full h-screen flex flex-col px-4";
 
   const headerContent = variant === 'tablet' ? (
     <div className="text-center py-4">
@@ -98,8 +98,8 @@ const DiscoverMobile = ({
           </div>
 
           {/* Основной контент */}
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="relative max-w-md w-full h-full max-h-[calc(100vh-200px)]">
+          <div className="flex-1 flex flex-col items-center justify-center min-h-0">
+            <div className="relative max-w-md w-full h-full">
               <AnimatePresence mode="wait">
                 <ProfileCard
                   key={currentProfile.id}
@@ -136,8 +136,8 @@ const DiscoverMobile = ({
           </div>
 
           {/* Основной контент */}
-          <div className="flex-1 flex items-center justify-center py-2">
-            <div className="relative w-full max-w-sm h-full max-h-[calc(100vh-180px)]">
+          <div className="flex-1 flex items-center justify-center min-h-0">
+            <div className="relative w-full max-w-sm h-full">
               <AnimatePresence mode="wait">
                 <ProfileCard
                   key={currentProfile.id}
@@ -154,7 +154,7 @@ const DiscoverMobile = ({
           </div>
 
           {/* Кнопки действий */}
-          <div className="flex-shrink-0 pb-20">
+          <div className="flex-shrink-0 pb-16 pt-2">
             <SwipeActions
               onSwipeLeft={() => onSwipe('left')}
               onSwipeUp={() => onSwipe('up')}

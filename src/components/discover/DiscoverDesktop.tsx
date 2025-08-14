@@ -18,7 +18,7 @@ const DiscoverDesktop = ({
   onSwipe
 }: DiscoverDesktopProps) => {
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-screen flex flex-col">
       {/* Заголовок */}
       <div className="text-center py-6 px-6">
         <h1 className="text-3xl xl:text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
@@ -30,7 +30,7 @@ const DiscoverDesktop = ({
       </div>
 
       {/* Основной контент */}
-      <div className="flex-1 flex justify-center items-center gap-4 lg:gap-6 xl:gap-8 px-6 pb-6">
+      <div className="flex-1 flex justify-center items-center gap-4 lg:gap-6 xl:gap-8 px-6 pb-6 min-h-0">
         {/* Статистика */}
         <div className="flex-shrink-0">
           <StatsBar 

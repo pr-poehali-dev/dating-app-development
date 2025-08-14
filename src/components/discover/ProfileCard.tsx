@@ -36,9 +36,9 @@ const ProfileCard = ({
   };
 
   const cardSizes = {
-    desktop: 'w-80 xl:w-96 h-[480px] xl:h-[600px]',
-    tablet: 'w-full h-full max-h-[500px]',
-    mobile: 'w-full h-full max-h-[520px]'
+    desktop: 'w-80 xl:w-96 h-[calc(100vh-180px)] max-h-[600px]',
+    tablet: 'w-full h-[calc(100vh-200px)]',
+    mobile: 'w-full h-[calc(100vh-160px)]'
   };
 
   const avatarSizes = {
