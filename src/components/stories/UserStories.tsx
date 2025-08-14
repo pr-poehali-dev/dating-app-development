@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { useStories } from '@/contexts/StoriesContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useDevice } from '@/hooks/useDevice';
 import StoryCreator from './StoryCreator';
 import StoryViewer from './StoryViewer';
 
@@ -19,6 +20,7 @@ const UserStories = ({ variant = 'mobile' }: UserStoriesProps) => {
   const [viewerStoryIndex, setViewerStoryIndex] = useState(0);
   const { userStories, deleteStory } = useStories();
   const { user } = useAuth();
+  const { isTouch } = useDevice();
 
   const handleViewStory = (storyIndex: number) => {
     setViewerStoryIndex(storyIndex);
@@ -85,6 +87,10 @@ const UserStories = ({ variant = 'mobile' }: UserStoriesProps) => {
                     <div
                       className={`relative ${variant === 'desktop' ? 'aspect-[9/16] h-32' : 'aspect-[9/16] h-24'} rounded-lg overflow-hidden cursor-pointer`}
                       onClick={() => handleViewStory(index)}
+                      onContextMenu={isTouch ? (e) => {
+                        e.preventDefault();
+                        handleDeleteStory(story.id);
+                      } : undefined}
                     >
                       {story.media[0].type === 'photo' ? (
                         <img
@@ -128,8 +134,10 @@ const UserStories = ({ variant = 'mobile' }: UserStoriesProps) => {
                         </span>
                       </div>
 
-                      {/* Контролы при наведении */}
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      {/* Контролы при наведении/всегда видимые на мобильных */}
+                      <div className={`absolute inset-0 bg-black/50 ${
+                        isTouch ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                      } transition-opacity duration-200 flex items-center justify-center`}>
                         <div className="flex gap-2">
                           <Button
                             size="sm"
