@@ -119,9 +119,53 @@ const Discover = () => {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100">
+    <div className="h-screen overflow-hidden relative bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100">
+      {/* Анимированный фон с геометрическими фигурами */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Большие круги */}
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-300/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-300/20 to-indigo-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-indigo-300/15 to-pink-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        
+        {/* Плавающие элементы */}
+        <div className="absolute top-20 left-20 w-4 h-4 bg-pink-400/30 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute top-40 right-32 w-3 h-3 bg-purple-400/30 rounded-full animate-bounce" style={{ animationDelay: '1.5s' }}></div>
+        <div className="absolute bottom-32 left-32 w-5 h-5 bg-indigo-400/30 rounded-full animate-bounce" style={{ animationDelay: '2.5s' }}></div>
+        <div className="absolute bottom-20 right-20 w-6 h-6 bg-pink-300/30 rounded-full animate-bounce" style={{ animationDelay: '0.8s' }}></div>
+        
+        {/* Сердечки */}
+        <div className="absolute top-16 left-1/4 text-pink-300/40 animate-pulse" style={{ animationDelay: '1s' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+        <div className="absolute bottom-16 right-1/4 text-purple-300/40 animate-pulse" style={{ animationDelay: '2s' }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+        
+        {/* Геометрические формы */}
+        <div className="absolute top-32 right-16 w-8 h-8 border-2 border-pink-300/30 rotate-45 animate-spin" style={{ animationDuration: '8s' }}></div>
+        <div className="absolute bottom-40 left-16 w-6 h-6 border-2 border-purple-300/30 rounded-full animate-spin" style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
+        
+        {/* Мерцающие звездочки */}
+        <div className="absolute top-24 left-1/3 text-indigo-300/50 animate-ping" style={{ animationDelay: '0.3s' }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0l3.09 6.26L22 7.27l-5 4.87 1.18 6.88L12 15.77l-6.18 3.25L7 12.14 2 7.27l6.91-1.01L12 0z"/>
+          </svg>
+        </div>
+        <div className="absolute bottom-28 right-1/3 text-pink-300/50 animate-ping" style={{ animationDelay: '1.8s' }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0l3.09 6.26L22 7.27l-5 4.87 1.18 6.88L12 15.77l-6.18 3.25L7 12.14 2 7.27l6.91-1.01L12 0z"/>
+          </svg>
+        </div>
+      </div>
+      
+      {/* Оверлей для лучшей читаемости */}
+      <div className="absolute inset-0 bg-white/5 backdrop-blur-[0.5px]"></div>
       {/* Десктоп версия */}
-      <div className="hidden lg:flex h-full">
+      <div className="hidden lg:flex h-full relative z-10">
         <DiscoverDesktop
           currentProfile={currentProfile}
           superLikes={superLikes}
@@ -131,7 +175,7 @@ const Discover = () => {
       </div>
 
       {/* Планшет версия */}
-      <div className="hidden md:flex lg:hidden h-full">
+      <div className="hidden md:flex lg:hidden h-full relative z-10">
         <DiscoverMobile
           currentProfile={currentProfile}
           superLikes={superLikes}
@@ -142,7 +186,7 @@ const Discover = () => {
       </div>
 
       {/* Мобильная версия */}
-      <div className="md:hidden h-full">
+      <div className="md:hidden h-full relative z-10">
         <DiscoverMobile
           currentProfile={currentProfile}
           superLikes={superLikes}
