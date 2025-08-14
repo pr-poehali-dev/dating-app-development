@@ -1,14 +1,19 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFriends } from '@/contexts/FriendsContext';
+import { useStories } from '@/contexts/StoriesContext';
+import StoryAvatar from '@/components/ui/StoryAvatar';
 
 const Navigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { getUnreadNotificationsCount } = useFriends();
+  const { getUserActiveStories, hasUnviewedStories } = useStories();
 
   const notificationsCount = getUnreadNotificationsCount();
+  const hasActiveStories = user ? getUserActiveStories(user.id).length > 0 : false;
 
   const navItems = [
     { path: '/discover', icon: 'Flame', label: 'Поиск' },
@@ -93,9 +98,16 @@ const Navigation = () => {
 
           {/* Профиль пользователя */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-              <Icon name="User" size={20} className="text-white" />
-            </div>
+            <StoryAvatar
+              hasStory={hasActiveStories}
+              viewed={false}
+              onClick={() => navigate('/stories')}
+              size="md"
+            >
+              <div className="w-full h-full bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                <Icon name="User" size={20} className="text-white" />
+              </div>
+            </StoryAvatar>
             <div className="text-sm">
               <div className="font-semibold text-gray-900">{user?.name}</div>
               <div className="text-gray-500">Онлайн</div>

@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import { User } from '@/contexts/AuthContext';
+import { useStories } from '@/contexts/StoriesContext';
 import Icon from '@/components/ui/icon';
+import StoryAvatar from '@/components/ui/StoryAvatar';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfilePhotoProps {
   profile: User;
@@ -20,6 +23,18 @@ const ProfilePhoto = ({
   avatarSizes,
   onSwipe
 }: ProfilePhotoProps) => {
+  const navigate = useNavigate();
+  const { getUserActiveStories, hasUnviewedStories } = useStories();
+  
+  const hasActiveStories = getUserActiveStories(profile.id).length > 0;
+  const hasUnviewed = hasUnviewedStories(profile.id);
+  
+  const handleStoryClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (hasActiveStories) {
+      navigate('/stories', { state: { userId: profile.id } });
+    }
+  };
   return (
     <div className={cn(
       "relative bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-600",
@@ -41,23 +56,38 @@ const ProfilePhoto = ({
       {/* Фото профиля */}
       <div className="absolute inset-0">
         {profile.photos && profile.photos.length > 0 ? (
-          <img 
-            src={profile.photos.find(p => p.isMain)?.url || profile.photos[0]?.url} 
-            alt={profile.name}
-            className="w-full h-full object-cover"
-          />
+          <StoryAvatar
+            hasStory={hasActiveStories}
+            viewed={!hasUnviewed}
+            onClick={handleStoryClick}
+            className="w-full h-full"
+            size="xl"
+          >
+            <img 
+              src={profile.photos.find(p => p.isMain)?.url || profile.photos[0]?.url} 
+              alt={profile.name}
+              className="w-full h-full object-cover rounded-lg"
+            />
+          </StoryAvatar>
         ) : (
           <div className="flex items-center justify-center h-full">
-            <div className={cn(
-              "bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm",
-              avatarSizes[variant].container,
-              variant === 'mobile' && "shadow-xl"
-            )}>
-              <Icon name="User" size={avatarSizes[variant].icon} className="text-white" />
-            </div>
+            <StoryAvatar
+              hasStory={hasActiveStories}
+              viewed={!hasUnviewed}
+              onClick={handleStoryClick}
+              size="xl"
+            >
+              <div className={cn(
+                "bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm",
+                avatarSizes[variant].container,
+                variant === 'mobile' && "shadow-xl"
+              )}>
+                <Icon name="User" size={avatarSizes[variant].icon} className="text-white" />
+              </div>
+            </StoryAvatar>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
       </div>
       
       {/* Бейджи верификации и премиум */}

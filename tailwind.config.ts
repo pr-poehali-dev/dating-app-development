@@ -100,6 +100,10 @@ export default {
 				'swipe-right': {
 					'0%': { transform: 'translateX(0) rotate(0deg)', opacity: '1' },
 					'100%': { transform: 'translateX(100%) rotate(30deg)', opacity: '0' }
+				},
+				'spin-slow': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' }
 				}
 			},
 			animation: {
@@ -108,7 +112,8 @@ export default {
 				'fade-in': 'fade-in 0.3s ease-out',
 				'scale-in': 'scale-in 0.2s ease-out',
 				'swipe-left': 'swipe-left 0.3s ease-out forwards',
-				'swipe-right': 'swipe-right 0.3s ease-out forwards'
+				'swipe-right': 'swipe-right 0.3s ease-out forwards',
+				'spin-slow': 'spin-slow 3s linear infinite'
 			}
 		}
 	},
