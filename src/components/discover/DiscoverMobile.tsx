@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { User } from '@/contexts/AuthContext';
+import { DemoUser } from '@/data/demoUsers';
 import ProfileCard from './ProfileCard';
 
 
 
 interface DiscoverMobileProps {
-  currentProfile: User;
+  currentProfile: User | DemoUser;
   superLikes: number;
   matches: string[];
   onSwipe: (direction: 'left' | 'right' | 'up') => void;

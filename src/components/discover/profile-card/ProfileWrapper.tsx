@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { User } from '@/contexts/AuthContext';
+import { DemoUser } from '@/data/demoUsers';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import ProfilePhoto from './ProfilePhoto';
 import ProfileInfo from './ProfileInfo';
 
 interface ProfileWrapperProps {
-  profile: User;
+  profile: User | DemoUser;
   dragOffset: { x: number; y: number };
   swipeDirection: 'left' | 'right' | 'up' | null;
   onTouchStart?: (e: React.TouchEvent) => void;

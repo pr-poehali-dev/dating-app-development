@@ -1,8 +1,9 @@
 import { User } from '@/contexts/AuthContext';
+import { DemoUser } from '@/data/demoUsers';
 import ProfileWrapper from './profile-card/ProfileWrapper';
 
 interface ProfileCardProps {
-  profile: User;
+  profile: User | DemoUser;
   dragOffset: { x: number; y: number };
   swipeDirection: 'left' | 'right' | 'up' | null;
   onTouchStart?: (e: React.TouchEvent) => void;

@@ -5,10 +5,11 @@ import DiscoverMobile from '@/components/discover/DiscoverMobile';
 import EmptyState from '@/components/discover/EmptyState';
 import StoriesFeed from '@/components/stories/StoriesFeed';
 import { useDevice } from '@/hooks/useDevice';
+import { demoUsers, DemoUser } from '@/data/demoUsers';
 
 const Discover = () => {
   const { user } = useAuth();
-  const [profiles, setProfiles] = useState<User[]>([]);
+  const [profiles, setProfiles] = useState<(User | DemoUser)[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matches, setMatches] = useState<string[]>([]);
   const [superLikes, setSuperLikes] = useState(3);
@@ -30,11 +31,22 @@ const Discover = () => {
     const oppositeGender = user?.gender === 'male' ? 'female' : 'male';
     
     // Показываем только пользователей противоположного пола (исключаем текущего пользователя)
-    const filteredProfiles = allUsers.filter((profile: User) => 
+    const filteredRealUsers = allUsers.filter((profile: User) => 
       profile.id !== user?.id && profile.gender === oppositeGender
     );
     
-    setProfiles(filteredProfiles);
+    // Добавляем демо-пользователей (все женского пола по умолчанию)
+    const filteredDemoUsers = demoUsers.filter(demoUser => 
+      !viewedProfiles.includes(demoUser.id)
+    );
+    
+    // Объединяем реальных и демо-пользователей
+    const allProfiles = [...filteredRealUsers, ...filteredDemoUsers];
+    
+    // Перемешиваем профили для разнообразия
+    const shuffledProfiles = allProfiles.sort(() => Math.random() - 0.5);
+    
+    setProfiles(shuffledProfiles);
     setCurrentIndex(0);
   };
 
