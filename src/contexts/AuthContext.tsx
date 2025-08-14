@@ -28,6 +28,7 @@ export interface User {
   email: string;
   password?: string;
   age: number;
+  gender: 'male' | 'female';
   bio: string;
   photos: UserPhoto[];
   location: {
@@ -107,6 +108,7 @@ interface RegisterData {
   email: string;
   password: string;
   age: number;
+  gender: string;
   bio: string;
   interests: string[];
 }
@@ -137,6 +139,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           email: 'swi79@bk.ru',
           password: '908908Tolya--Qwe',
           age: 35,
+          gender: 'male' as const,
           bio: 'Администратор системы NoumiDating',
           photos: [],
           location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
@@ -153,6 +156,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           email: 'anna@example.com',
           password: 'password123',
           age: 28,
+          gender: 'female' as const,
           bio: 'Люблю путешествия, читать книги и проводить время с друзьями. Ищу серьёзные отношения.',
           photos: [],
           location: { lat: 59.9311, lng: 30.3609, city: 'СПб' },
@@ -183,6 +187,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           email: 'max@example.com',
           password: 'password123',
           age: 32,
+          gender: 'male' as const,
           bio: 'Программист и любитель спорта. Хочу найти партнёра для совместных приключений.',
           photos: [],
           location: { lat: 55.7558, lng: 37.6176, city: 'Москва' },
@@ -213,6 +218,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           email: 'maria@example.com',
           password: 'password123',
           age: 26,
+          gender: 'female' as const,
           bio: 'Художница и любительница природы. Люблю создавать красоту вокруг себя.',
           photos: [],
           location: { lat: 56.8431, lng: 60.6454, city: 'Екатеринбург' },
@@ -243,6 +249,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           email: 'alex@example.com',
           password: 'password123',
           age: 29,
+          gender: 'male' as const,
           bio: 'Врач-стоматолог, люблю путешествия и активный отдых. Мечтаю о семье.',
           photos: [],
           location: { lat: 55.0084, lng: 82.9357, city: 'Новосибирск' },

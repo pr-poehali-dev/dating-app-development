@@ -26,9 +26,12 @@ const Discover = () => {
     // Загружаем реальных пользователей из localStorage
     const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
     
-    // Показываем всех пользователей кроме текущего (убираем фильтр по просмотренным)
+    // Определяем противоположный пол
+    const oppositeGender = user?.gender === 'male' ? 'female' : 'male';
+    
+    // Показываем только пользователей противоположного пола (исключаем текущего пользователя)
     const filteredProfiles = allUsers.filter((profile: User) => 
-      profile.id !== user?.id
+      profile.id !== user?.id && profile.gender === oppositeGender
     );
     
     setProfiles(filteredProfiles);

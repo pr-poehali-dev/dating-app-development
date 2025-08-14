@@ -17,6 +17,7 @@ const Auth = () => {
     email: '',
     password: '',
     age: '',
+    gender: '',
     bio: '',
     interests: [] as string[]
   });
@@ -46,7 +47,7 @@ const Auth = () => {
     e.preventDefault();
     setError('');
     
-    if (!registerForm.name || !registerForm.email || !registerForm.password || !registerForm.age) {
+    if (!registerForm.name || !registerForm.email || !registerForm.password || !registerForm.age || !registerForm.gender) {
       setError('Заполните все обязательные поля');
       return;
     }
@@ -184,6 +185,19 @@ const Auth = () => {
                       className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
                       placeholder="25"
                     />
+                  </div>
+                  <div>
+                    <Label htmlFor="gender" className="text-white">Пол *</Label>
+                    <select
+                      id="gender"
+                      value={registerForm.gender}
+                      onChange={(e) => setRegisterForm(prev => ({ ...prev, gender: e.target.value }))}
+                      className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-white/30"
+                    >
+                      <option value="" className="text-gray-700">Выберите пол</option>
+                      <option value="male" className="text-gray-700">Мужской</option>
+                      <option value="female" className="text-gray-700">Женский</option>
+                    </select>
                   </div>
                   <div>
                     <Label htmlFor="bio" className="text-white">О себе</Label>
