@@ -29,20 +29,46 @@ const StoryCreator = ({ onClose }: StoryCreatorProps) => {
     const newFiles = [...selectedFiles, ...validFiles].slice(0, 10); // Максимум 10 файлов
     setSelectedFiles(newFiles);
 
-    // Создаём превью
-    const newPreviews = [...previews];
+    // Создаём превью для новых файлов
     validFiles.forEach((file, index) => {
-      if (newPreviews.length + index < 10) {
+      if (selectedFiles.length + index < 10) {
         const reader = new FileReader();
         reader.onload = (e) => {
           const result = e.target?.result as string;
-          setPreviews(prev => [...prev.slice(0, newPreviews.length + index), result, ...prev.slice(newPreviews.length + index + 1)]);
+          const previewIndex = selectedFiles.length + index;
+          setPreviews(prev => {
+            const newPreviews = [...prev];
+            newPreviews[previewIndex] = result;
+            return newPreviews;
+          });
         };
-        reader.readAsDataURL(file);
-        newPreviews.push(''); // Placeholder
+        
+        if (file.type.startsWith('image/')) {
+          reader.readAsDataURL(file);
+        } else if (file.type.startsWith('video/')) {
+          // Для видео создаём thumbnail
+          const video = document.createElement('video');
+          video.onloadedmetadata = () => {
+            video.currentTime = 1;
+          };
+          video.onseeked = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(video, 0, 0);
+            const thumbnail = canvas.toDataURL('image/jpeg', 0.7);
+            
+            setPreviews(prev => {
+              const newPreviews = [...prev];
+              newPreviews[selectedFiles.length + index] = thumbnail;
+              return newPreviews;
+            });
+          };
+          video.src = URL.createObjectURL(file);
+        }
       }
     });
-    setPreviews(newPreviews);
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -162,19 +188,29 @@ const StoryCreator = ({ onClose }: StoryCreatorProps) => {
                         className="relative group aspect-square"
                       >
                         {file.type.startsWith('image/') ? (
-                          <img
-                            src={previews[index] || ''}
-                            alt={file.name}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
+                          previews[index] ? (
+                            <img
+                              src={previews[index]}
+                              alt={file.name}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
+                              <Icon name="Image" size={20} className="text-gray-400" />
+                            </div>
+                          )
                         ) : (
                           <div className="w-full h-full bg-gray-800 rounded-lg flex items-center justify-center relative">
-                            {previews[index] && (
+                            {previews[index] ? (
                               <img
                                 src={previews[index]}
                                 alt={file.name}
                                 className="w-full h-full object-cover rounded-lg"
                               />
+                            ) : (
+                              <div className="w-full h-full bg-gray-600 rounded-lg flex items-center justify-center">
+                                <Icon name="Video" size={20} className="text-gray-300" />
+                              </div>
                             )}
                             <div className="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center">
                               <Icon name="Play" size={20} className="text-white" />
