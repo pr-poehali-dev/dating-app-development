@@ -59,14 +59,17 @@ const Navigation = () => {
       <nav className="hidden lg:flex fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-gray-200 px-6 py-4 z-50">
         <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
           {/* Логотип */}
-          <div className="flex items-center space-x-3">
+          <Link 
+            to="/discover" 
+            className="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer"
+          >
             <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
               <Icon name="Heart" size={24} className="text-white" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               NoumiDating
             </span>
-          </div>
+          </Link>
 
           {/* Навигационные элементы */}
           <div className="flex items-center space-x-1">
