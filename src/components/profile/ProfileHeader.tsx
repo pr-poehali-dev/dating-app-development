@@ -1,11 +1,14 @@
 import { User } from '@/contexts/AuthContext';
+import { useStories } from '@/contexts/StoriesContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import Icon from '@/components/ui/icon';
+import StoryAvatar from '@/components/ui/StoryAvatar';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   name: string;
@@ -36,30 +39,48 @@ const ProfileHeader = ({
   variant = 'mobile'
 }: ProfileHeaderProps) => {
   const isDesktop = variant === 'desktop';
+  const navigate = useNavigate();
+  const { getUserActiveStories, hasUnviewedStories } = useStories();
+  
+  const hasActiveStories = getUserActiveStories(user.id).length > 0;
+  const hasUnviewed = hasUnviewedStories(user.id);
+  
+  const handleStoryClick = () => {
+    if (hasActiveStories) {
+      navigate('/stories', { state: { userId: user.id } });
+    }
+  };
 
   const AvatarComponent = () => (
     <div className="relative">
-      <div className={cn(
-        "bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center",
-        isDesktop ? "w-32 h-32" : "w-24 h-24"
-      )}>
-        {user.photos && user.photos.length > 0 ? (
-          <img 
-            src={user.photos.find(p => p.isMain)?.url || user.photos[0]?.url} 
-            alt={user.name}
-            className="w-full h-full object-cover rounded-full"
-          />
-        ) : (
-          <Icon 
-            name="User" 
-            size={isDesktop ? 64 : 36} 
-            className="text-white" 
-          />
-        )}
-      </div>
+      <StoryAvatar
+        hasStory={hasActiveStories}
+        viewed={!hasUnviewed}
+        onClick={handleStoryClick}
+        size={isDesktop ? 'xl' : 'lg'}
+      >
+        <div className={cn(
+          "bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center",
+          isDesktop ? "w-32 h-32" : "w-24 h-24"
+        )}>
+          {user.photos && user.photos.length > 0 ? (
+            <img 
+              src={user.photos.find(p => p.isMain)?.url || user.photos[0]?.url} 
+              alt={user.name}
+              className="w-full h-full object-cover rounded-full"
+            />
+          ) : (
+            <Icon 
+              name="User" 
+              size={isDesktop ? 64 : 36} 
+              className="text-white" 
+            />
+          )}
+        </div>
+      </StoryAvatar>
       {user.verified && (
         <div className={cn(
-          "absolute bg-blue-500 rounded-full p-2",
+          "absolute bg-blue-500 rounded-full p-2 z-10",
           isDesktop ? "-bottom-2 -right-2" : "-bottom-1 -right-1"
         )}>
           <Icon 
@@ -70,7 +91,7 @@ const ProfileHeader = ({
         </div>
       )}
       <div className={cn(
-        "absolute bg-green-500 rounded-full border-white animate-pulse",
+        "absolute bg-green-500 rounded-full border-white animate-pulse z-10",
         isDesktop 
           ? "-top-1 -right-1 w-6 h-6 border-4" 
           : "-top-1 -right-1 w-4 h-4 border-2"

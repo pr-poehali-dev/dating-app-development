@@ -22,7 +22,7 @@ const StoryAvatar = ({
     sm: 'w-12 h-12',
     md: 'w-16 h-16', 
     lg: 'w-20 h-20',
-    xl: 'w-24 h-24'
+    xl: 'w-32 h-32'
   };
 
   const paddingClasses = {
@@ -30,6 +30,13 @@ const StoryAvatar = ({
     md: 'p-1',
     lg: 'p-1.5',
     xl: 'p-2'
+  };
+
+  const innerSizeClasses = {
+    sm: 'w-10 h-10',
+    md: 'w-14 h-14',
+    lg: 'w-17 h-17',
+    xl: 'w-28 h-28'
   };
 
   return (
@@ -67,7 +74,7 @@ const StoryAvatar = ({
       {/* Контент аватарки */}
       <div className={cn(
         'relative rounded-full overflow-hidden',
-        hasStory ? (size === 'sm' ? 'w-10 h-10' : size === 'md' ? 'w-14 h-14' : size === 'lg' ? 'w-17 h-17' : 'w-20 h-20') : 'w-full h-full'
+        hasStory ? innerSizeClasses[size] : 'w-full h-full'
       )}>
         {children}
       </div>
