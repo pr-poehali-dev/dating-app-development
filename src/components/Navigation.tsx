@@ -39,7 +39,7 @@ const Navigation = () => {
               <div className="relative">
                 <Icon name={item.icon as any} size={24} />
                 {item.badge && item.badge > 0 && (
-                  <div className="absolute -top-1 -right-1 bg-red-500 rounded-full w-2 h-2 animate-pulse border border-white"></div>
+                  <div className="absolute -top-1 -right-1 bg-red-500 rounded-full w-3 h-3 animate-pulse border border-white"></div>
                 )}
               </div>
             </Link>
