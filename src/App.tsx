@@ -25,6 +25,7 @@ import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
 import Admin from "./pages/Admin";
 import Stories from "./pages/Stories";
+import ReelsPage from "./pages/ReelsPage";
 
 import NotFound from "./pages/NotFound";
 import WebLayout from "./components/layouts/WebLayout";
@@ -71,6 +72,7 @@ const AppContent = () => {
       <Route path="/profile" element={<Layout><ProtectedRoute><ProfileComponent /></ProtectedRoute></Layout>} />
       <Route path="/user/:id" element={<Layout><ProtectedRoute><UserProfile /></ProtectedRoute></Layout>} />
       <Route path="/stories" element={<Layout><ProtectedRoute><Stories /></ProtectedRoute></Layout>} />
+      <Route path="/reels" element={<ProtectedRoute><ReelsPage /></ProtectedRoute>} />
       <Route path="/notifications" element={<Layout><ProtectedRoute><Notifications /></ProtectedRoute></Layout>} />
       <Route path="/settings" element={<Layout><ProtectedRoute><Settings /></ProtectedRoute></Layout>} />
       <Route path="/admin" element={<Layout><ProtectedRoute><Admin /></ProtectedRoute></Layout>} />
